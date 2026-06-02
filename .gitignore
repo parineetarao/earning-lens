@@ -1,0 +1,10 @@
+serviceAccountKey.json
+inference/.env
+backend/.env
+frontend/.env
+inference/transcripts/
+inference/models/
+__pycache__/
+*.pyc
+node_modules/
+dist/

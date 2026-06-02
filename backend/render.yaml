@@ -1,0 +1,19 @@
+# backend/render.yaml
+
+services:
+  - type: web
+    name: earninglens-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: FIREBASE_PROJECT_ID
+        value: earninglens-ce8dd
+      - key: FIREBASE_DATABASE_URL
+        value: https://earninglens-ce8dd-default-rtdb.firebaseio.com
+      - key: FIREBASE_CRED_JSON
+        sync: false
+      - key: PORT
+        value: 8000
