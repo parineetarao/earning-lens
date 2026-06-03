@@ -2,28 +2,28 @@ import { useState } from 'react'
 
 import { theme } from '../theme'
 
-export default function SentenceCard({ sentence, showAspect = true }) {
+export default function SentenceCard({ sentence, showAspect = true, isHighlighted = false }) {
   const [isHovered, setIsHovered] = useState(false)
 
   const sentiment = sentence?.sentiment === 'positive' || sentence?.sentiment === 'negative' ? sentence.sentiment : 'neutral'
 
   const sentimentStyles = {
     positive: {
-      borderColor: theme.colors.positive,
-      backgroundColor: 'rgba(5,150,105,0.03)',
-      hoverBackgroundColor: 'rgba(5,150,105,0.07)',
+      borderColor: isHighlighted ? '#C8922A' : theme.colors.positive,
+      backgroundColor: isHighlighted ? 'rgba(200,146,42,0.08)' : 'rgba(5,150,105,0.03)',
+      hoverBackgroundColor: isHighlighted ? 'rgba(200,146,42,0.12)' : 'rgba(5,150,105,0.07)',
       confidenceColor: theme.colors.positive,
     },
     negative: {
-      borderColor: theme.colors.negative,
-      backgroundColor: 'rgba(220,38,38,0.04)',
-      hoverBackgroundColor: 'rgba(220,38,38,0.07)',
+      borderColor: isHighlighted ? '#C8922A' : theme.colors.negative,
+      backgroundColor: isHighlighted ? 'rgba(200,146,42,0.08)' : 'rgba(220,38,38,0.04)',
+      hoverBackgroundColor: isHighlighted ? 'rgba(200,146,42,0.12)' : 'rgba(220,38,38,0.07)',
       confidenceColor: theme.colors.negative,
     },
     neutral: {
-      borderColor: theme.colors.neutralBorder,
-      backgroundColor: 'transparent',
-      hoverBackgroundColor: theme.colors.neutralBg,
+      borderColor: isHighlighted ? '#C8922A' : theme.colors.neutralBorder,
+      backgroundColor: isHighlighted ? 'rgba(200,146,42,0.08)' : 'transparent',
+      hoverBackgroundColor: isHighlighted ? 'rgba(200,146,42,0.12)' : theme.colors.neutralBg,
       confidenceColor: theme.colors.textMuted,
     },
   }
@@ -42,11 +42,23 @@ export default function SentenceCard({ sentence, showAspect = true }) {
         padding: '9px 16px',
         borderBottom: `1px solid ${theme.colors.border}`,
         cursor: 'default',
-        transition: 'background-color 150ms ease',
+        transition: 'all 150ms ease',
         position: 'relative',
         backgroundColor: isHovered ? activeStyles.hoverBackgroundColor : activeStyles.backgroundColor,
+        outline: isHighlighted ? '2px solid #C8922A' : 'none',
+        outlineOffset: '-2px',
+        zIndex: isHighlighted ? 1 : 0,
+        animation: isHighlighted ? 'highlightPulse 600ms ease-out' : 'none',
       }}
     >
+      <style>{`
+        @keyframes highlightPulse {
+          0%   { box-shadow: 0 0 0 0 rgba(200,146,42,0.4); }
+          50%  { box-shadow: 0 0 0 6px rgba(200,146,42,0.1); }
+          100% { box-shadow: 0 0 0 0 rgba(200,146,42,0); }
+        }
+      `}</style>
+
       <div
         aria-hidden="true"
         style={{
@@ -54,7 +66,7 @@ export default function SentenceCard({ sentence, showAspect = true }) {
           left: 0,
           top: 0,
           bottom: 0,
-          width: '3px',
+          width: isHighlighted ? '4px' : '3px',
           backgroundColor: activeStyles.borderColor,
         }}
       />
@@ -69,10 +81,32 @@ export default function SentenceCard({ sentence, showAspect = true }) {
           fontFamily: theme.fonts.body,
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
+          paddingRight: isHighlighted ? '70px' : '0',
         }}
       >
         {sentence?.text || ''}
       </div>
+
+      {isHighlighted && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '6px',
+            right: '8px',
+            background: '#FEF3C7',
+            border: '1px solid #FCD34D',
+            borderRadius: '3px',
+            padding: '1px 6px',
+            fontSize: '9px',
+            fontFamily: theme.fonts.mono,
+            color: '#78350F',
+            fontWeight: 700,
+            pointerEvents: 'none',
+          }}
+        >
+          RELEVANT
+        </div>
+      )}
 
       {isHovered ? (
         <div
