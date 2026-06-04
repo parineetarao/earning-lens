@@ -55,8 +55,8 @@ function ScoreBlock({ label, score, count, fillColor }) {
   return (
     <div
       style={{
-        backgroundColor: '#0D1410',
-        border: '0.5px solid #1E2E26',
+        backgroundColor: theme.colors.bgPrimary,
+        border: `1px solid ${theme.colors.border}`,
         borderRadius: '6px',
         padding: '16px',
         flex: 1,
@@ -66,11 +66,12 @@ function ScoreBlock({ label, score, count, fillColor }) {
       <div
         style={{
           fontSize: '10px',
-          color: '#4A6354',
+          color: theme.colors.textTertiary,
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
           marginBottom: '8px',
           lineHeight: 1,
+          fontFamily: theme.fonts.mono,
         }}
       >
         {label}
@@ -92,7 +93,7 @@ function ScoreBlock({ label, score, count, fillColor }) {
         style={{
           marginTop: '4px',
           fontSize: '11px',
-          color: '#4A6354',
+          color: theme.colors.textMuted,
           lineHeight: 1.2,
         }}
       >
@@ -104,7 +105,7 @@ function ScoreBlock({ label, score, count, fillColor }) {
           width: '100%',
           height: '4px',
           borderRadius: '2px',
-          backgroundColor: '#1E2E26',
+          backgroundColor: theme.colors.border,
           marginTop: '12px',
           overflow: 'hidden',
         }}
@@ -132,11 +133,12 @@ export default function QASentimentSplit({ qaSplit }) {
       <div
         style={{
           fontSize: '10px',
-          color: '#4A6354',
+          color: theme.colors.textTertiary,
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
           marginBottom: '16px',
           lineHeight: 1,
+          fontFamily: theme.fonts.mono,
         }}
       >
         Q&amp;A SENTIMENT SPLIT
@@ -146,7 +148,7 @@ export default function QASentimentSplit({ qaSplit }) {
         <div
           style={{
             fontSize: '12px',
-            color: '#4A6354',
+            color: theme.colors.textMuted,
             fontStyle: 'italic',
             lineHeight: 1.6,
           }}
@@ -158,7 +160,7 @@ export default function QASentimentSplit({ qaSplit }) {
           <div
             style={{
               fontSize: '12px',
-              color: '#8FA897',
+              color: theme.colors.textSecondary,
               lineHeight: 1.6,
               marginBottom: '20px',
             }}
@@ -171,14 +173,14 @@ export default function QASentimentSplit({ qaSplit }) {
               label="PREPARED REMARKS"
               score={qaSplit?.prepared_score}
               count={qaSplit?.prepared_count}
-              fillColor="#2ECC87"
+              fillColor={theme.colors.positive}
             />
 
             <ScoreBlock
-              label="Q&amp;A SESSION"
+              label="Q&A SESSION"
               score={qaSplit?.qa_score}
               count={qaSplit?.qa_count}
-              fillColor="#378ADD"
+              fillColor={theme.colors.amber}
             />
           </div>
 
@@ -199,7 +201,7 @@ export default function QASentimentSplit({ qaSplit }) {
                 marginTop: '8px',
                 fontSize: '12px',
                 lineHeight: 1.6,
-                color: gapColor,
+                color: theme.colors.textSecondary,
               }}
             >
               {Number.isFinite(gap) && gap > 0.15

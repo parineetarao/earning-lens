@@ -13,14 +13,15 @@ import {
 import { collection, getDocs } from 'firebase/firestore'
 
 import { db } from '../firebase'
+import { theme } from '../theme'
 
 const ASPECT_ORDER = ['revenue', 'margins', 'guidance', 'competition', 'macro']
 
 const ASPECT_COLORS = {
-  revenue: '#2ECC87',
-  margins: '#FFA502',
-  guidance: '#378ADD',
-  competition: '#FF4757',
+  revenue: theme.colors.positive,
+  margins: theme.colors.warning,
+  guidance: theme.colors.navy,
+  competition: theme.colors.negative,
   macro: '#9B59B6',
 }
 
@@ -97,18 +98,20 @@ function renderTooltip({ active, payload, label }) {
   return (
     <div
       style={{
-        backgroundColor: '#0D1410',
-        border: '0.5px solid #1E2E26',
+        backgroundColor: '#FFFFFF',
+        border: `1px solid ${theme.colors.border}`,
         borderRadius: '6px',
         padding: '10px 14px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
       }}
     >
       <div
         style={{
           fontSize: '11px',
-          color: '#4A6354',
+          color: theme.colors.textSecondary,
           marginBottom: '6px',
           lineHeight: 1.2,
+          fontFamily: theme.fonts.body,
         }}
       >
         {label}
@@ -131,7 +134,7 @@ function renderTooltip({ active, payload, label }) {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: '12px',
-                  minWidth: '180px',
+                  minWidth: '160px',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -139,7 +142,7 @@ function renderTooltip({ active, payload, label }) {
                     style={{
                       width: '8px',
                       height: '8px',
-                      borderRadius: '999px',
+                      borderRadius: '50%',
                       backgroundColor: color,
                       flexShrink: 0,
                     }}
@@ -147,8 +150,9 @@ function renderTooltip({ active, payload, label }) {
                   <span
                     style={{
                       fontSize: '12px',
-                      color: '#8FA897',
+                      color: theme.colors.textSecondary,
                       lineHeight: 1.2,
+                      fontFamily: theme.fonts.body,
                     }}
                   >
                     {ASPECT_LABELS[aspect] || aspect}
@@ -157,10 +161,11 @@ function renderTooltip({ active, payload, label }) {
 
                 <span
                   style={{
-                    fontFamily: "'Space Mono', monospace",
+                    fontFamily: theme.fonts.mono,
                     fontSize: '12px',
-                    color: '#E8F0EB',
+                    color: '#000000',
                     lineHeight: 1.2,
+                    fontWeight: 600,
                   }}
                 >
                   {displayValue}
@@ -183,9 +188,9 @@ function renderLegend({ payload }) {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '12px',
+        gap: '16px',
         justifyContent: 'center',
-        marginTop: '12px',
+        marginTop: '16px',
       }}
     >
       {payload
@@ -204,8 +209,9 @@ function renderLegend({ payload }) {
             >
               <span
                 style={{
-                  width: '12px',
-                  height: '2px',
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
                   backgroundColor: ASPECT_COLORS[aspect],
                   flexShrink: 0,
                 }}
@@ -213,8 +219,9 @@ function renderLegend({ payload }) {
               <span
                 style={{
                   fontSize: '11px',
-                  color: '#8FA897',
+                  color: theme.colors.textSecondary,
                   lineHeight: 1.2,
+                  fontFamily: theme.fonts.body,
                 }}
               >
                 {ASPECT_LABELS[aspect] || aspect}
@@ -302,10 +309,11 @@ export default function SentimentTrajectory({ companyId, selectedQuarterId }) {
       >
         <div
           style={{
-            color: '#4A6354',
+            color: theme.colors.textMuted,
             fontSize: '12px',
             textAlign: 'center',
             lineHeight: 1.4,
+            fontFamily: theme.fonts.body,
           }}
         >
           Loading trajectory data...
@@ -324,17 +332,18 @@ export default function SentimentTrajectory({ companyId, selectedQuarterId }) {
       <div style={{ width: '100%', height: '260px' }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-            <CartesianGrid stroke="#1E2E26" strokeDasharray="3 3" />
+            <CartesianGrid stroke={theme.colors.border} strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="quarter"
-              tick={{ fontSize: 10, fill: '#4A6354' }}
+              tick={{ fontSize: 10, fill: theme.colors.textTertiary, fontFamily: theme.fonts.mono }}
               axisLine={false}
               tickLine={false}
+              dy={10}
             />
             <YAxis
               domain={[0.2, 1.0]}
               ticks={TICKS}
-              tick={{ fontSize: 10, fill: '#4A6354' }}
+              tick={{ fontSize: 10, fill: theme.colors.textTertiary, fontFamily: theme.fonts.mono }}
               axisLine={false}
               tickLine={false}
               width={28}
@@ -344,9 +353,9 @@ export default function SentimentTrajectory({ companyId, selectedQuarterId }) {
             {selectedQuarterLabel ? (
               <ReferenceLine
                 x={selectedQuarterLabel}
-                stroke="#2ECC87"
-                strokeDasharray="3 3"
-                strokeWidth={1}
+                stroke={theme.colors.amber}
+                strokeDasharray="4 4"
+                strokeWidth={1.5}
               />
             ) : null}
             {ASPECT_ORDER.map((aspect) => (
@@ -355,10 +364,11 @@ export default function SentimentTrajectory({ companyId, selectedQuarterId }) {
                 type="monotone"
                 dataKey={aspect}
                 stroke={ASPECT_COLORS[aspect]}
-                strokeWidth={1.5}
-                dot={{ r: 3, fill: ASPECT_COLORS[aspect], stroke: ASPECT_COLORS[aspect], strokeWidth: 1 }}
-                activeDot={{ r: 4, fill: ASPECT_COLORS[aspect], stroke: ASPECT_COLORS[aspect], strokeWidth: 1 }}
+                strokeWidth={2}
+                dot={{ r: 3, fill: ASPECT_COLORS[aspect], strokeWidth: 0 }}
+                activeDot={{ r: 5, fill: ASPECT_COLORS[aspect], stroke: '#FFF', strokeWidth: 2 }}
                 connectNulls={true}
+                animationDuration={800}
               />
             ))}
           </LineChart>

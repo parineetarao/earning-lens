@@ -1,3 +1,5 @@
+import { theme } from '../theme'
+
 function formatDeltaValue(delta, direction) {
   if (!Number.isFinite(delta)) {
     return direction === 'increased' ? '+0' : '0'
@@ -11,7 +13,7 @@ function formatDeltaValue(delta, direction) {
 }
 
 function VocabRow({ entry, direction }) {
-  const deltaColor = direction === 'increased' ? '#2ECC87' : '#FF4757'
+  const deltaColor = direction === 'increased' ? theme.colors.positive : theme.colors.negative
   const deltaValue = formatDeltaValue(entry?.delta, direction)
   const hasCounts = Number.isFinite(entry?.prior) || Number.isFinite(entry?.current)
 
@@ -19,7 +21,7 @@ function VocabRow({ entry, direction }) {
     <div
       style={{
         padding: '7px 0',
-        borderBottom: '0.5px solid #1E2E26',
+        borderBottom: `0.5px solid ${theme.colors.border}`,
       }}
     >
       <div
@@ -33,7 +35,7 @@ function VocabRow({ entry, direction }) {
         <div
           style={{
             fontSize: '13px',
-            color: '#E8F0EB',
+            color: '#000000',
             fontFamily: 'Space Mono, monospace',
             lineHeight: 1.35,
             wordBreak: 'break-word',
@@ -61,7 +63,7 @@ function VocabRow({ entry, direction }) {
           style={{
             marginTop: '3px',
             fontSize: '10px',
-            color: '#4A6354',
+            color: theme.colors.textMuted,
             fontFamily: 'Inter, sans-serif',
             lineHeight: 1.4,
           }}
@@ -80,7 +82,7 @@ function VocabRow({ entry, direction }) {
 }
 
 function Section({ title, direction, entries }) {
-  const headerColor = direction === 'increased' ? '#2ECC87' : '#FF4757'
+  const headerColor = direction === 'increased' ? theme.colors.positive : theme.colors.negative
   const icon = direction === 'increased' ? '▲' : '▼'
 
   return (
@@ -125,7 +127,7 @@ export default function VocabDelta({ vocabDelta, currentQuarter, priorQuarter })
         style={{
           marginBottom: '8px',
           fontSize: '10px',
-          color: '#4A6354',
+          color: theme.colors.textTertiary,
           fontFamily: 'Inter, sans-serif',
           letterSpacing: '0.08em',
           lineHeight: 1,
@@ -141,7 +143,7 @@ export default function VocabDelta({ vocabDelta, currentQuarter, priorQuarter })
             style={{
               marginBottom: '16px',
               fontSize: '11px',
-              color: '#4A6354',
+              color: theme.colors.textSecondary,
               fontFamily: 'Inter, sans-serif',
               lineHeight: 1.5,
             }}
@@ -180,7 +182,7 @@ export default function VocabDelta({ vocabDelta, currentQuarter, priorQuarter })
           <div
             style={{
               fontSize: '13px',
-              color: '#4A6354',
+              color: theme.colors.textMuted,
               marginBottom: '6px',
             }}
           >
@@ -189,7 +191,7 @@ export default function VocabDelta({ vocabDelta, currentQuarter, priorQuarter })
           <div
             style={{
               fontSize: '11px',
-              color: '#4A6354',
+              color: theme.colors.textMuted,
               fontFamily: 'Space Mono',
               lineHeight: 1.6,
               maxWidth: '320px',
