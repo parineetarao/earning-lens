@@ -52,8 +52,8 @@ function LogoItem({ ticker, name }) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '10px',
-        padding: '0 36px',
+        gap: '12px',
+        padding: '0 44px',
         height: '100%',
         cursor: 'pointer',
         borderRight: '1px solid rgba(255,255,255,0.06)',
@@ -70,9 +70,9 @@ function LogoItem({ ticker, name }) {
           alt={name}
           onError={() => setImgError(true)}
           style={{
-            height: '36px',
+            height: '52px',
             width: 'auto',
-            maxWidth: '110px',
+            maxWidth: '140px',
             objectFit: 'contain',
             display: 'block',
             opacity: 1,
@@ -82,7 +82,7 @@ function LogoItem({ ticker, name }) {
       ) : (
         <div
           style={{
-            height: '36px',
+            height: '52px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -102,11 +102,11 @@ function LogoItem({ ticker, name }) {
       )}
       <span
         style={{
-          fontSize: '10px',
+          fontSize: '11px',
           fontFamily: 'Inter, sans-serif',
           color: 'rgba(255,255,255,0.4)',
           whiteSpace: 'nowrap',
-          maxWidth: '110px',
+          maxWidth: '140px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           textAlign: 'center',
@@ -127,9 +127,7 @@ export default function CompanyLogoStrip() {
         width: '100%',
         overflow: 'hidden',
         position: 'relative',
-        height: '100px',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        height: '120px',
         background: 'rgba(255,255,255,0.02)',
       }}
     >

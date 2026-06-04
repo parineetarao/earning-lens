@@ -205,6 +205,32 @@ export default function Header() {
         <nav style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <button
             type="button"
+            onClick={() => navigate('/')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'rgba(255,255,255,1)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
+            }}
+            style={{
+              fontSize: '13px',
+              color: 'rgba(255,255,255,0.6)',
+              fontWeight: 500,
+              padding: '6px 12px',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              border: 'none',
+              outline: 'none',
+              fontFamily: 'Inter, sans-serif',
+              lineHeight: 1,
+              transition: 'color 160ms ease',
+            }}
+          >
+            Home
+          </button>
+
+          <button
+            type="button"
             onClick={() => setSearchOpen(true)}
             onMouseEnter={() => setSearchHover(true)}
             onMouseLeave={() => setSearchHover(false)}
@@ -285,21 +311,6 @@ export default function Header() {
             style={navLinkStyle(isSectorActive)}
           >
             Sectors
-          </a>
-
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noreferrer"
-            onMouseEnter={(event) => {
-              event.currentTarget.style.color = 'rgba(255,255,255,1)'
-            }}
-            onMouseLeave={(event) => {
-              event.currentTarget.style.color = 'rgba(255,255,255,0.6)'
-            }}
-            style={navLinkStyle(false)}
-          >
-            GitHub
           </a>
         </nav>
       </header>
