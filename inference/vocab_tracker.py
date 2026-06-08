@@ -2,29 +2,161 @@
 
 import re
 from collections import Counter
+import nltk
+from nltk.corpus import stopwords
+from nltk import pos_tag, word_tokenize
+
+# Download required NLTK data (run once)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+nltk.download('averaged_perceptron_tagger_eng', quiet=True)
+nltk.download('punkt', quiet=True)
+nltk.download('punkt_tab', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
 
 # Common English stopwords plus earnings call filler words.
 # These are filtered out before counting because they appear in every
 # transcript at high frequency and carry no analytical signal.
-STOPWORDS = {
-    # Standard English stopwords
-    "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
-    "of", "with", "by", "from", "as", "is", "was", "are", "were", "be",
-    "been", "being", "have", "has", "had", "do", "does", "did", "will",
-    "would", "could", "should", "may", "might", "shall", "can", "need",
-    "that", "this", "these", "those", "it", "its", "we", "our", "us",
-    "you", "your", "they", "their", "he", "she", "his", "her", "i", "my",
-    "not", "no", "nor", "so", "yet", "both", "either", "neither", "each",
-    "than", "such", "when", "while", "if", "then", "than", "there", "here",
-    "what", "which", "who", "how", "all", "any", "more", "also", "about",
-    "up", "out", "into", "over", "after", "before", "between", "during",
-    # Earnings call filler — high frequency but zero signal
-    "quarter", "year", "financial", "results", "call", "good", "thank",
-    "morning", "evening", "ladies", "gentlemen", "operator", "please",
-    "next", "question", "answer", "management", "company", "business",
-    "said", "say", "saying", "one", "two", "three", "per", "cent",
-    "percent", "crore", "crores", "million", "billion", "rs", "inr",
+FINANCIAL_STOPWORDS = set([
+    # Standard stopwords
+    'the','a','an','and','or','but','in','on','at','to','for','of','with',
+    'by','from','as','is','was','are','were','be','been','have','has','had',
+    'do','does','did','will','would','could','should','may','might','shall',
+    'that','this','these','those','it','its','we','our','us','you','they',
+    'their','he','she','i','my','not','no','so','if','then','than','when',
+    'which','who','how','all','any','more','over','after','before','during',
+    'into','about','such','some','other','also','been','very','just','now',
+    'well','right','good','going','look','think','know','want','need','make',
+    'get','see','say','said','come','take','give','use','find','back','way',
+    'because','while','though','although','however','therefore','thus',
+    # Conversational filler (specific to earnings calls)
+    'yes','okay','ok','yeah','absolutely','certainly','exactly','sure',
+    'great','wonderful','thank','thanks','appreciate','congratulations',
+    'please','certainly','definitely','clearly','obviously','basically',
+    'actually','really','quite','rather','pretty','fairly','simply',
+    'always','never','often','usually','generally','typically','normally',
+    # Earnings call specific noise
+    'quarter','quarters','year','years','fiscal','fy','q1','q2','q3','q4',
+    'first','second','third','fourth','one','two','three','four','five',
+    'per','basis','point','points','percent','percentage','basis',
+    'mr','ms','mrs','sir','madam','ladies','gentlemen','hello','hi',
+    've','re','ll','d','s','t','m','n','er','uh','um',
+    # Abbreviations that appear as noise
+    'cr','pat','ytd','yoy','qoq','lhs','rhs','fyi','imo','btw',
+    # Common proper nouns that appear as noise
+    'india','indian','company','companies','business','businesses',
+    'management','team','board','director','chairman','ceo','cfo','coo',
+    'analyst','analysts','investor','investors','operator','moderator',
+])
+
+# POS tags to KEEP — only these word types are financially meaningful
+KEEP_POS_TAGS = {
+    'JJ',   # Adjective: cautious, strong, elevated, weak
+    'JJR',  # Adjective comparative: stronger, weaker, higher
+    'JJS',  # Adjective superlative: strongest, weakest
+    'VB',   # Verb base: accelerate, expand, decline, improve
+    'VBD',  # Verb past tense: accelerated, expanded, declined
+    'VBG',  # Verb gerund: accelerating, expanding, declining
+    'VBN',  # Verb past participle: improved, reduced, impacted
+    'VBP',  # Verb present: improve, reduce, impact
+    'VBZ',  # Verb 3rd person: improves, reduces, impacts
+    'NN',   # Noun singular: growth, margin, revenue, pressure
+    'NNS',  # Noun plural: margins, revenues, headwinds
+    'RB',   # Adverb: significantly, moderately, substantially
+    'RBR',  # Adverb comparative: more significantly
 }
+
+# Additional words to always exclude even if they pass POS filter
+ALWAYS_EXCLUDE = {
+    # Generic verbs with no financial signal
+    'say','said','says','saying','go','goes','went','going',
+    'come','came','comes','coming','get','got','gets','getting',
+    'give','gave','gives','giving','take','took','takes','taking',
+    'make','made','makes','making','see','saw','sees','seeing',
+    'know','knew','knows','knowing','think','thought','thinks',
+    'want','wanted','wants','wanting','need','needed','needs',
+    'look','looked','looks','looking','mean','means','meant',
+    'continue','continued','continues','continuing',
+    'remain','remained','remains','remaining',
+    'include','included','includes','including',
+    'increase','increase','increases','increasing',  # too generic alone
+    'happen','happened','happens','happening',
+    # Generic nouns with no signal
+    'number','numbers','time','times','way','ways','thing','things',
+    'part','parts','place','places','point','points','level','levels',
+    'side','area','areas','kind','type','types','lot','lots',
+    'result','results','case','cases','fact','basis','line','lines',
+    'end','start','top','bottom','front','back','set','sets',
+    # Names and titles (proper nouns handled separately)
+    'mahindra','tata','reliance','hdfc','icici','infosys','wipro',
+}
+
+def is_meaningful_word(word, pos_tag_result):
+    """
+    Returns True only if the word is financially meaningful.
+    """
+    word_lower = word.lower()
+    
+    # Must be at least 4 characters
+    if len(word_lower) < 4:
+        return False
+    
+    # Must not be in stopwords
+    if word_lower in FINANCIAL_STOPWORDS:
+        return False
+    
+    # Must not be in always-exclude list
+    if word_lower in ALWAYS_EXCLUDE:
+        return False
+    
+    # Must not be purely numeric or contain digits
+    if re.search(r'\d', word_lower):
+        return False
+    
+    # Must not be an abbreviation (all caps, short)
+    if word.isupper() and len(word) <= 5:
+        return False
+    
+    # Must not start with capital (likely proper noun — person/company name)
+    # Exception: if it appears at start of sentence it may be legitimate
+    # We handle this by checking the POS tag
+    pos = pos_tag_result
+    
+    # Reject proper nouns (NNP, NNPS) — these are person/company names
+    if pos in ('NNP', 'NNPS'):
+        return False
+    
+    # Must be in the meaningful POS categories
+    if pos not in KEEP_POS_TAGS:
+        return False
+    
+    return True
+
+
+def get_word_frequencies(sentences):
+    """
+    Extract financially meaningful word frequencies from a list of sentence dicts.
+    Uses POS tagging to filter out proper nouns, filler words, and abbreviations.
+    """
+    from collections import Counter
+    
+    all_text = ' '.join(
+        s.get('text', '') for s in sentences if s.get('text')
+    ).lower()
+    
+    # Tokenize
+    tokens = word_tokenize(all_text)
+    
+    # POS tag all tokens at once (more accurate than word by word)
+    tagged = pos_tag(tokens)
+    
+    # Filter to meaningful words only
+    meaningful_words = [
+        word for word, pos in tagged
+        if is_meaningful_word(word, pos)
+    ]
+    
+    return Counter(meaningful_words)
 
 
 def tokenize(text: str) -> list[str]:

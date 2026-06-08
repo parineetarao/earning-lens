@@ -36,6 +36,15 @@ const STYLES = `
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
 `;
 
 // ─── DATA ──────────────────────────────────────────────────────────────────
@@ -82,6 +91,41 @@ const SECTOR_PILLS = [
   { id: 'cement', label: 'Cement', count: 4, color: '#6B7280' },
   { id: 'energy', label: 'Energy', count: 5, color: '#F97316' }
 ];
+
+const ROLES = [
+  {
+    badge: 'SELL-SIDE',
+    title: 'Equity Research Analyst',
+    description: 'Covering 15 to 20 companies means reading 80 earnings call transcripts every quarter. EarningLens tracks how management language shifts across each quarter — tone, vocabulary, guidance confidence — and surfaces the signals before they appear in reported results. Spend less time reading. More time interpreting.',
+    highlights: ['Sector heatmap across 8 quarters', 'Guidance drift auto-detection', 'Peer-relative sentiment scoring'],
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80',
+    imageAlt: 'Financial analyst reviewing data on multiple screens',
+  },
+  {
+    badge: 'BUY-SIDE',
+    title: 'Portfolio Manager',
+    description: 'Monitoring 30 positions with limited bandwidth. You need to know which management teams are becoming more cautious before the quarter ends — not after. EarningLens flags guidance language deterioration the moment a transcript is published, so your attention goes where it matters.',
+    highlights: ['Watchlist with per-company alerts', 'Q-o-Q sentiment trajectory', 'Ask questions across any transcript'],
+    image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=900&q=80',
+    imageAlt: 'Portfolio manager reviewing investment charts',
+  },
+  {
+    badge: 'CREDIT',
+    title: 'Credit Analyst',
+    description: 'Lending decisions depend on management credibility and forward-looking confidence. Subjective transcript review introduces inconsistency. EarningLens quantifies guidance sentiment per quarter, tracks vocabulary shifts, and scores the gap between scripted remarks and unscripted Q&A responses.',
+    highlights: ['Prepared vs Q&A sentiment gap', 'Guidance sentiment scored 0–1', 'Vocabulary frequency delta'],
+    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=900&q=80',
+    imageAlt: 'Credit analyst reviewing financial documents',
+  },
+  {
+    badge: 'RETAIL',
+    title: 'Independent Investor',
+    description: 'Institutional research is expensive and slow. EarningLens gives independent investors the same sentence-level earnings call intelligence that sell-side analysts use — 35 NSE companies, 8 quarters of history, AI-generated analyst briefs. No login. No paywall. No Bloomberg subscription required.',
+    highlights: ['AI-generated analyst brief per quarter', 'Plain-language intelligence', 'Free, no account needed'],
+    image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=900&q=80',
+    imageAlt: 'Independent investor checking stocks on laptop',
+  },
+]
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────
 function useCountUp(target, duration = 1500) {
@@ -533,41 +577,6 @@ function FeatureCardsGrid() {
   )
 }
 
-function StepBlock({ num, icon, iconColor, title, desc, tags, iconBg }) {
-  return (
-    <div>
-      <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '11px', color: '#C8922A', display: 'block', marginBottom: '16px' }}>
-        {num}
-      </span>
-      <div style={{
-        width: '40px', height: '40px',
-        background: iconBg, border: '1px solid #E2E8F0', borderRadius: '8px',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '16px', color: iconColor, fontFamily: 'Space Mono, monospace',
-      }}>
-        {icon}
-      </div>
-      <div style={{ fontSize: '14px', fontWeight: 600, color: '#1E3A5F', marginTop: '14px', fontFamily: 'Inter, sans-serif' }}>
-        {title}
-      </div>
-      <div style={{ fontSize: '12px', color: '#374151', lineHeight: '1.7', marginTop: '8px', fontFamily: 'Inter, sans-serif' }}>
-        {desc}
-      </div>
-      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '14px' }}>
-        {tags.map(t => (
-          <span key={t} style={{
-            fontSize: '10px', fontFamily: 'Space Mono, monospace', color: '#374151',
-            background: '#F1F5F9', border: '1px solid #E2E8F0',
-            borderRadius: '3px', padding: '2px 8px',
-          }}>
-            {t}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 function SectorHeatmapCard({ sector, navigate, index, visible }) {
   const [hovered, setHovered] = useState(false);
   const animDelay = index * 0.08;
@@ -734,6 +743,31 @@ function CompanyLogoStrip() {
 export default function LandingPage() {
   const navigate = useNavigate();
 
+  // Persona state
+  const [current, setCurrent] = useState(0)
+  const [sliding, setSliding] = useState(false)
+  const [direction, setDirection] = useState('next')
+
+  const goNext = () => {
+    if (sliding) return
+    setDirection('next')
+    setSliding(true)
+    setTimeout(() => {
+      setCurrent(prev => (prev + 1) % ROLES.length)
+      setSliding(false)
+    }, 380)
+  }
+
+  const goPrev = () => {
+    if (sliding) return
+    setDirection('prev')
+    setSliding(true)
+    setTimeout(() => {
+      setCurrent(prev => (prev - 1 + ROLES.length) % ROLES.length)
+      setSliding(false)
+    }, 380)
+  }
+
   // Hover states
   const [primaryHovered, setPrimaryHovered] = useState(false);
   const [secondaryHovered, setSecondaryHovered] = useState(false);
@@ -804,24 +838,20 @@ export default function LandingPage() {
           {/* Headline */}
           <h1 style={{ margin: 0, display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
             <div style={{ fontSize: '52px', fontFamily: 'Inter, sans-serif', fontWeight: 600, color: '#1E3A5F', letterSpacing: '-0.02em', lineHeight: 1.1, animation: 'slideUpFade 0.6s ease-out 0s both' }}>
-              What management says
+              Tracking management narratives.
             </div>
-            <div style={{ fontSize: '52px', fontFamily: 'Inter, sans-serif', fontWeight: 600, color: '#1E3A5F', letterSpacing: '-0.02em', lineHeight: 1.1, animation: 'slideUpFade 0.6s ease-out 0.1s both' }}>
-              tells you what's coming.
-            </div>
-            <div style={{ fontSize: '52px', fontFamily: 'Inter, sans-serif', fontWeight: 700, color: '#C8922A', letterSpacing: '-0.02em', lineHeight: 1.1, animation: 'slideUpFade 0.6s ease-out 0.2s both' }}>
-              Before the numbers do.
+            <div style={{ fontSize: '52px', fontFamily: 'Inter, sans-serif', fontWeight: 700, color: '#C8922A', letterSpacing: '-0.02em', lineHeight: 1.1, animation: 'slideUpFade 0.6s ease-out 0.1s both' }}>
+              Across every quarter.
             </div>
           </h1>
 
           {/* Subheadline */}
           <p style={{
-            fontSize: '15px', color: '#374151', lineHeight: 1.7, maxWidth: '480px', margin: '20px 0 0 0',
+            fontSize: '16px', color: '#374151', lineHeight: 1.7, maxWidth: '480px', margin: '20px 0 0 0',
             fontFamily: 'Inter, sans-serif', animation: 'fadeIn 0.7s ease-out 0.4s both'
           }}>
-            EarningLens reads every earnings call from 35 NSE-listed companies,
-            tracks how management tone shifts quarter by quarter, and surfaces
-            the signals that move before reported results do.
+            A structured view of how management thinking evolves across 
+            businesses, sectors, and market conditions.
           </p>
 
           {/* Meta Lines */}
@@ -980,30 +1010,14 @@ export default function LandingPage() {
         {STATS.map((s, i) => <StatBlock key={s.label} stat={s} last={i === STATS.length - 1} />)}
       </section>
 
-      {/* SECTION 3 — HOW IT WORKS (CINEMATIC WALKTHROUGH) */}
+      {/* SECTION 3 — PRODUCT WALKTHROUGH */}
       <section ref={sec3Ref} style={{
-        background: '#F7F8FA',
-        padding: '80px 80px',
+        background: '#F0F2F5',
+        padding: '80px 0',
         borderTop: '1px solid #E4E7EE',
         borderBottom: '1px solid #E4E7EE',
       }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            fontSize: '11px', color: '#9CA3AF', fontFamily: 'Space Mono, monospace',
-            textTransform: 'uppercase', letterSpacing: '0.1em',
-          }}>HOW IT WORKS</div>
-          <h2 style={{
-            fontSize: '32px', color: '#0C1628', fontWeight: 600, fontFamily: 'Inter, sans-serif',
-            margin: '8px 0 0 0',
-          }}>See it in action.</h2>
-          <p style={{
-            fontSize: '14px', color: '#6B7280', fontFamily: 'Inter, sans-serif',
-            maxWidth: '480px', margin: '10px auto 48px auto', lineHeight: 1.6,
-          }}>
-            A 30-second walkthrough of how EarningLens surfaces intelligence
-            from an earnings call.
-          </p>
-        </div>
+        
         <CinematicWalkthrough />
       </section>
 
@@ -1030,16 +1044,267 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 6 — METHODOLOGY */}
-      <section ref={sec6Ref} style={{ background: '#FFFFFF', padding: '48px 80px', borderTop: '1px solid #E2E8F0' }}>
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <div style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'Space Mono, monospace', textTransform: 'uppercase' }}>METHODOLOGY</div>
-          <h2 style={{ fontSize: '28px', color: '#1E3A5F', fontWeight: 600, fontFamily: 'Inter, sans-serif', margin: '8px 0' }}>From transcript to intelligence</h2>
+      {/* SECTION 6 — PERSONAS */}
+      <section ref={sec6Ref} style={{ 
+        background: '#FFFFFF', 
+        padding: '80px', 
+        borderTop: '1px solid #E4E7EE', 
+        borderBottom: '1px solid #E4E7EE' 
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ 
+            fontSize: '11px', 
+            color: '#9CA3AF', 
+            fontFamily: 'Space Mono, monospace', 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.1em',
+            marginBottom: '10px'
+          }}>WHO THIS IS BUILT FOR</div>
+          <h2 style={{ 
+            fontSize: '30px', 
+            color: '#0C1628', 
+            fontWeight: 600, 
+            fontFamily: 'Inter, sans-serif' 
+          }}>Built for people who read between the lines.</h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px', alignItems: 'start', maxWidth: '900px', margin: '0 auto' }}>
-          <StepBlock num="01" icon="PDF" iconColor="#374151" title="BSE Transcript Download" desc="Python scraper downloads earnings call transcript PDFs from BSE India for all 35 covered companies." tags={['PyMuPDF', 'BSE API', 'Python 3.11']} iconBg="#F8FAFC" />
-          <StepBlock num="02" icon="∫" iconColor="#C8922A" title="FinBERT Sentence Scoring" desc="Every sentence in every transcript is individually scored by FinBERT — a BERT model pre-trained on financial text." tags={['FinBERT', 'PyTorch', 'HuggingFace']} iconBg="#F8FAFC" />
-          <StepBlock num="03" icon="◈" iconColor="#059669" title="Firebase + LLM Layer" desc="Sentence scores, aspect breakdowns, and AI-generated analyst briefs are written to Firestore for real-time frontend access." tags={['Firebase', 'Groq LLaMA 3.1', 'React 18']} iconBg="#F8FAFC" />
+
+        <div style={{
+          maxWidth: '1000px',
+          margin: '0 auto',
+          height: '480px',
+          borderRadius: '14px',
+          overflow: 'hidden',
+          display: 'flex',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)',
+          position: 'relative',
+        }}>
+          {/* LEFT PANEL: TEXT */}
+          <div style={{
+            width: '48%',
+            background: '#0C1628',
+            padding: '52px 48px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Decoration */}
+            <div style={{
+              width: '300px',
+              height: '300px',
+              borderRadius: '50%',
+              background: 'rgba(200,146,42,0.05)',
+              position: 'absolute',
+              bottom: '-80px',
+              right: '-80px',
+              pointerEvents: 'none',
+            }} />
+
+            <div style={{ 
+              position: 'relative',
+              zIndex: 1,
+              opacity: sliding ? 0 : 1,
+              transform: sliding ? (direction === 'next' ? 'translateX(-32px)' : 'translateX(32px)') : 'translateX(0)',
+              transition: 'opacity 380ms ease, transform 380ms ease',
+              animation: !sliding ? (direction === 'next' ? 'slideInRight 380ms ease forwards' : 'slideInLeft 380ms ease forwards') : 'none'
+            }}>
+              {/* Badge */}
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: 'rgba(200,146,42,0.12)',
+                border: '1px solid rgba(200,146,42,0.25)',
+                borderRadius: '4px',
+                padding: '4px 12px',
+                fontSize: '10px',
+                fontFamily: 'Space Mono, monospace',
+                color: '#C8922A',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                marginBottom: '20px',
+                width: 'fit-content'
+              }}>
+                {ROLES[current].badge}
+              </div>
+
+              {/* Title */}
+              <h3 style={{
+                fontSize: '28px',
+                fontWeight: 600,
+                color: '#FFFFFF',
+                fontFamily: 'Inter, sans-serif',
+                lineHeight: 1.2,
+                letterSpacing: '-0.01em',
+                marginBottom: '18px',
+                margin: '0 0 18px 0'
+              }}>
+                {ROLES[current].title}
+              </h3>
+
+              {/* Description */}
+              <p style={{
+                fontSize: '14px',
+                color: 'rgba(255,255,255,0.65)',
+                fontFamily: 'Inter, sans-serif',
+                lineHeight: 1.8,
+                marginBottom: '28px',
+                margin: '0 0 28px 0'
+              }}>
+                {ROLES[current].description}
+              </p>
+
+              {/* Highlights */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {ROLES[current].highlights.map(h => (
+                  <div key={h} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#C8922A', flexShrink: 0 }} />
+                    <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontFamily: 'Space Mono, monospace' }}>{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div style={{ 
+              marginTop: 'auto', 
+              paddingTop: '32px', 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              position: 'relative',
+              zIndex: 1
+            }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {ROLES.map((_, i) => (
+                  <div key={i} style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: i === current ? '#C8922A' : 'rgba(255,255,255,0.2)',
+                    transition: 'background 200ms ease, transform 200ms ease',
+                    transform: i === current ? 'scale(1.3)' : 'scale(1)'
+                  }} />
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {current > 0 && (
+                    <button
+                      onClick={goPrev}
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        background: 'rgba(255,255,255,0.08)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        color: 'rgba(255,255,255,0.6)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        transition: 'all 200ms ease',
+                        outline: 'none',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+                        e.currentTarget.style.color = '#FFFFFF';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.6)';
+                      }}
+                    >
+                      ←
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={current === ROLES.length - 1 ? undefined : goNext}
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      background: current === ROLES.length - 1 ? 'rgba(46,204,135,0.15)' : '#C8922A',
+                      border: current === ROLES.length - 1 ? '1px solid rgba(46,204,135,0.3)' : 'none',
+                      color: current === ROLES.length - 1 ? '#2ECC87' : '#0C1628',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: current === ROLES.length - 1 ? 'default' : 'pointer',
+                      fontSize: '16px',
+                      transition: 'all 200ms ease',
+                      outline: 'none'
+                    }}
+                    onMouseEnter={e => {
+                      if (current !== ROLES.length - 1) e.currentTarget.style.background = '#D4A843';
+                    }}
+                    onMouseLeave={e => {
+                      if (current !== ROLES.length - 1) e.currentTarget.style.background = '#C8922A';
+                    }}
+                  >
+                    {current === ROLES.length - 1 ? "✓" : "→"}
+                  </button>
+                </div>
+                <div style={{
+                  fontSize: '10px',
+                  color: 'rgba(255,255,255,0.3)',
+                  fontFamily: 'Space Mono, monospace',
+                  marginTop: '6px'
+                }}>
+                  {current + 1} / {ROLES.length}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT PANEL: IMAGE */}
+          <div style={{
+            width: '52%',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            <img 
+              src={ROLES[current].image}
+              alt={ROLES[current].imageAlt}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                display: 'block',
+                opacity: sliding ? 0 : 1,
+                transition: 'opacity 380ms ease'
+              }}
+            />
+            {/* Gradient Overlay */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to right, rgba(12,22,40,0.3) 0%, transparent 30%)',
+              pointerEvents: 'none',
+            }} />
+
+            {/* Echo Title */}
+            <div style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              background: 'rgba(12,22,40,0.7)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '6px',
+              padding: '8px 14px',
+              fontSize: '11px',
+              color: 'rgba(255,255,255,0.8)',
+              fontFamily: 'Space Mono, monospace',
+              letterSpacing: '0.06em',
+            }}>
+              {ROLES[current].badge}
+            </div>
+          </div>
         </div>
       </section>
 
