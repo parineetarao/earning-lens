@@ -13,14 +13,17 @@ COMPANY_BSE_CODES = {
     # Steel
     "SAIL":       "500113",
     "JINDALSTEL": "532286",
-    "NMDC":       "526371",
+    "TATASTEEL":  "500470",
     "HINDALCO":   "500440",
+    "JSWSTEEL":   "500228",
 
     # Banking
     "HDFCBANK":   "500180",
     "ICICIBANK":  "532174",
     "SBIN":       "500112",
     "INDUSINDBK": "532187",
+    "AXISBANK":   "532215",
+    "KOTAKBANK":  "500247",
 
     # IT Services
     "TCS":        "532540",
@@ -43,6 +46,7 @@ COMPANY_BSE_CODES = {
     "HEROMOTOCO": "500182",
     "EICHERMOT":  "505200",
     "MM":         "500520",
+    "MARUTI":     "532500",
 
     # Pharma
     "SUNPHARMA":  "524715",
@@ -56,6 +60,7 @@ COMPANY_BSE_CODES = {
     "AMBUJACEM":  "500425",
     "SHREECEM":   "500387",
     "ACCLTD":     "500410",
+    "DALIMACEM":  "542216",
 
     # Energy
     "RELIANCE":   "500325",
@@ -63,7 +68,7 @@ COMPANY_BSE_CODES = {
     "TORNTPOWER": "532779",
     "ADANIGREEN": "541450",
     "NTPC":       "532555",
-    "POWERGRID":  "532898",
+    "ONGC":         "500312",
 }
 
 # One API call per quarter — avoids the 50-record limit.

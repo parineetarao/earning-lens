@@ -7,6 +7,46 @@ import CompanyComparison from '../components/CompanyComparison'
 import { db } from '../firebase'
 import { theme } from '../theme'
 
+function getHeatmapCacheKey(sectorId, companies) {
+  return `el_v1_heatmap_${sectorId}_${[...companies].sort().join('_')}`
+}
+
+function readHeatmapCache(key) {
+  try {
+    const raw = localStorage.getItem(key)
+    if (!raw) return null
+    const { data, timestamp } = JSON.parse(raw)
+    // Expires after 24 hours
+    if (Date.now() - timestamp > 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(key)
+      return null
+    }
+    return data
+  } catch {
+    return null
+  }
+}
+
+function writeHeatmapCache(key, data) {
+  try {
+    localStorage.setItem(key, JSON.stringify({
+      data,
+      timestamp: Date.now(),
+    }))
+  } catch {
+    // Storage full — clear old entries
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const k = localStorage.key(i)
+      if (k && k.startsWith('el_v1_heatmap_')) {
+        localStorage.removeItem(k)
+      }
+    }
+    try {
+      localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }))
+    } catch {}
+  }
+}
+
 // ─── constants ────────────────────────────────────────────────────────────────
 const QUARTER_IDS = ['Q1_FY24', 'Q2_FY24', 'Q3_FY24', 'Q4_FY24', 'Q1_FY25', 'Q2_FY25', 'Q3_FY25', 'Q4_FY25']
 const MOST_RECENT = 'Q4_FY25'
@@ -276,6 +316,14 @@ export default function SectorPage() {
         setHasDriftAlert({})
         return
       }
+      const cacheKey = getHeatmapCacheKey(normalizedSectorId, companyList)
+      const cached = readHeatmapCache(cacheKey)
+
+      if (cached) {
+        setScoresByCompany(cached.scores || {})
+        setHasDriftAlert(cached.alerts || {})
+        return
+    }
       setHeatmapLoading(true)
       try {
         const entries = await Promise.all(
@@ -318,6 +366,10 @@ export default function SectorPage() {
           scores[cId] = s
           alertMap[cId] = drift
         })
+        writeHeatmapCache(cacheKey, {
+          scores,
+          alerts: alertMap,
+      })
         setScoresByCompany(scores)
         setHasDriftAlert(alertMap)
       } catch (e) {

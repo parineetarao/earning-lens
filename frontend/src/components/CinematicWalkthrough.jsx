@@ -149,7 +149,7 @@ function SceneContent({ sceneId, typedText, briefText, showAnswer, showDropdown,
         {(sceneId === 'search-open' || sceneId === 'typing') && (
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'rgba(10,18,40,0.96)',
+            background: 'rgba(10,18,40,0.82)',
             display: 'flex', flexDirection: 'column',
             alignItems: 'center', paddingTop: '18%',
             zIndex: 50,
@@ -573,56 +573,138 @@ function SceneContent({ sceneId, typedText, briefText, showAnswer, showDropdown,
 
   // ── SECTORS PAGE ──────────────────────────────────────────────
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F8FAFC' }}>
+    <div style={{ display:'flex', flexDirection:'column', height:'100%', background:'#F8FAFC' }}>
       {header}
-      <div style={{ padding: '8px 12px', borderBottom: '1px solid #E4E7EE', background: '#fff' }}>
-        <div style={{ fontSize: 5, color: '#9CA3AF', fontFamily: 'Space Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SECTOR INTELLIGENCE</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      
+      {/* Sector header */}
+      <div style={{ padding:'6px 12px', borderBottom:'1px solid #E4E7EE', background:'#fff', flexShrink:0 }}>
+        <div style={{ fontSize:5, color:'#9CA3AF', fontFamily:'Space Mono,monospace', textTransform:'uppercase', letterSpacing:'0.08em' }}>
+          SECTOR INTELLIGENCE
+        </div>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#0C1628', fontFamily: 'Inter, sans-serif' }}>Banking</div>
-            <div style={{ fontSize: 6, color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>3 companies · 8 quarters</div>
+            <div style={{ fontSize:11, fontWeight:600, color:'#0C1628', fontFamily:'Inter,sans-serif' }}>Banking</div>
+            <div style={{ fontSize:5, color:'#6B7280', fontFamily:'Inter,sans-serif' }}>3 companies · 8 quarters</div>
           </div>
-          <div style={{ display: 'flex', gap: 4 }}>
+          <div style={{ display:'flex', gap:3 }}>
             {['Auto','Banking','Cement','FMCG','IT Services','Pharma','Steel'].map(s => (
               <div key={s} style={{
-                fontSize: 5, padding: '2px 5px', borderRadius: 10,
-                border: `0.5px solid ${s === 'Banking' ? '#C8922A' : '#E4E7EE'}`,
-                color: s === 'Banking' ? '#C8922A' : '#6B7280',
-                background: s === 'Banking' ? '#FEF3C7' : 'transparent',
-                fontFamily: 'Inter, sans-serif',
+                fontSize:4, padding:'2px 5px', borderRadius:10,
+                border:`0.5px solid ${s==='Banking'?'#C8922A':'#E4E7EE'}`,
+                color: s==='Banking'?'#C8922A':'#6B7280',
+                background: s==='Banking'?'#FEF3C7':'transparent',
+                fontFamily:'Inter,sans-serif',
               }}>{s}</div>
             ))}
           </div>
         </div>
       </div>
-      <div style={{ padding: '8px 12px', flex: 1 }}>
-        <div style={{ fontSize: 5, color: '#9CA3AF', fontFamily: 'Space Mono, monospace', textTransform: 'uppercase', marginBottom: 6 }}>SENTIMENT HEATMAP</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '60px repeat(8, 1fr)', gap: 2 }}>
-          <div />
-          {['Q1 FY24','Q2 FY24','Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25'].map(q => (
-            <div key={q} style={{ fontSize: 4, color: '#9CA3AF', textAlign: 'center', fontFamily: 'Space Mono, monospace' }}>{q.replace(' ', '\n')}</div>
+
+      {/* Narrative */}
+      <div style={{ padding:'5px 12px', fontSize:6, color:'#374151', fontFamily:'Inter,sans-serif', borderBottom:'1px solid #F3F4F6', flexShrink:0 }}>
+        Banking sector averaged <span style={{color:'#C8922A',fontFamily:'Space Mono,monospace'}}>0.75</span> across 3 companies.{' '}
+        <span style={{color:'#0C1628',fontWeight:600}}>HDFCBANK</span> leads at{' '}
+        <span style={{color:'#059669',fontFamily:'Space Mono,monospace'}}>+0.06</span> above peers.
+      </div>
+
+      {/* Heatmap — compact */}
+      <div style={{ padding:'6px 12px', borderBottom:'1px solid #E4E7EE', flexShrink:0 }}>
+        <div style={{ fontSize:5, color:'#9CA3AF', fontFamily:'Space Mono,monospace', textTransform:'uppercase', marginBottom:4 }}>SENTIMENT HEATMAP</div>
+        <div style={{ display:'grid', gridTemplateColumns:'52px repeat(8,1fr)', gap:2 }}>
+          <div/>
+          {['Q1 FY24','Q2 FY24','Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25'].map(q=>(
+            <div key={q} style={{ fontSize:3.5, color:'#9CA3AF', textAlign:'center', fontFamily:'Space Mono,monospace' }}>{q}</div>
           ))}
           {[
-            { name: 'HDFCBANK', scores: [0.76,0.79,0.81,0.77,0.82,0.81,0.79,0.76] },
-            { name: 'ICICIBANK', scores: [0.76,null,null,0.76,null,null,0.74,0.77] },
-            { name: 'SBIN',      scores: [0.79,0.73,0.76,0.75,0.75,0.76,0.76,0.73] },
+            { name:'HDFCBANK', scores:[0.76,0.79,0.81,0.77,0.82,0.81,0.79,0.76] },
+            { name:'ICICIBANK', scores:[0.76,null,null,0.76,null,null,0.74,0.77] },
+            { name:'SBIN',      scores:[0.79,0.73,0.76,0.75,0.75,0.76,0.76,0.73] },
           ].map(({ name, scores }) => (
             <>
-              <div key={name} style={{ fontSize: 5, color: '#374151', fontFamily: 'Space Mono, monospace', display: 'flex', alignItems: 'center' }}>{name}</div>
-              {scores.map((s, i) => {
-                const bg = !s ? '#F1F5F9' : s >= 0.70 ? '#86EFAC' : s >= 0.60 ? '#BBF7D0' : '#FDE68A'
-                const fg = !s ? '#9CA3AF' : s >= 0.70 ? '#14532D' : s >= 0.60 ? '#166534' : '#78350F'
+              <div key={name} style={{ fontSize:5, color:'#374151', fontFamily:'Space Mono,monospace', display:'flex', alignItems:'center' }}>{name}</div>
+              {scores.map((s,i) => {
+                const bg = !s?'#F1F5F9':s>=0.70?'#86EFAC':s>=0.60?'#BBF7D0':'#FDE68A'
+                const fg = !s?'#9CA3AF':s>=0.70?'#14532D':s>=0.60?'#166534':'#78350F'
                 return (
                   <div key={i} style={{
-                    height: 20, background: bg, borderRadius: 2,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 4.5, color: fg, fontFamily: 'Space Mono, monospace',
-                  }}>
-                    {s ? s.toFixed(2) : ''}
-                  </div>
+                    height:16, background:bg, borderRadius:2,
+                    display:'flex', alignItems:'center', justifyContent:'center',
+                    fontSize:4, color:fg, fontFamily:'Space Mono,monospace',
+                  }}>{s?s.toFixed(2):''}</div>
                 )
               })}
             </>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom two columns: comparison chart + aspect breakdown */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:0, flex:1, overflow:'hidden' }}>
+        
+        {/* Left — comparison chart */}
+        <div style={{ padding:'6px 10px', borderRight:'1px solid #E4E7EE' }}>
+          <div style={{ fontSize:5, color:'#9CA3AF', fontFamily:'Space Mono,monospace', textTransform:'uppercase', marginBottom:4 }}>COMPARE COMPANIES</div>
+          <div style={{ display:'flex', gap:6, marginBottom:6 }}>
+            <div style={{ fontSize:5, padding:'2px 8px', border:'1px solid #E4E7EE', borderRadius:3, color:'#374151', fontFamily:'Inter,sans-serif', background:'#fff' }}>HDFCBANK ▾</div>
+            <span style={{ fontSize:5, color:'#9CA3AF', alignSelf:'center' }}>vs</span>
+            <div style={{ fontSize:5, padding:'2px 8px', border:'1px solid #E4E7EE', borderRadius:3, color:'#374151', fontFamily:'Inter,sans-serif', background:'#fff' }}>ICICIBANK ▾</div>
+          </div>
+          {/* Mini line chart */}
+          <svg viewBox="0 0 200 80" style={{ width:'100%', height:80 }}>
+            {/* Grid lines */}
+            {[0.5,0.7,0.9].map(v=>(
+              <line key={v} x1="0" y1={80-v*80} x2="200" y2={80-v*80} stroke="#F3F4F6" strokeWidth="0.5"/>
+            ))}
+            {/* HDFCBANK line - green */}
+            <polyline
+              points="0,19 28,17 57,15 85,18 114,14 142,15 170,17 200,19"
+              fill="none" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+            />
+            {/* ICICIBANK line - amber dashed */}
+            <polyline
+              points="0,19 28,20 57,19 85,19 114,21 142,20 170,21 200,19"
+              fill="none" stroke="#C8922A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+              strokeDasharray="3,2"
+            />
+            {/* X axis labels */}
+            {['Q1','Q2','Q3','Q4','Q1','Q2','Q3','Q4'].map((l,i)=>(
+              <text key={i} x={i*28.5} y={78} fontSize="4" fill="#9CA3AF" fontFamily="Space Mono,monospace">{l}</text>
+            ))}
+          </svg>
+          <div style={{ display:'flex', gap:10, marginTop:2 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:3 }}>
+              <div style={{ width:10, height:2, background:'#059669', borderRadius:1 }}/>
+              <span style={{ fontSize:4, color:'#6B7280', fontFamily:'Inter,sans-serif' }}>HDFCBANK</span>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:3 }}>
+              <div style={{ width:10, height:2, background:'#C8922A', borderRadius:1, borderTop:'1px dashed #C8922A' }}/>
+              <span style={{ fontSize:4, color:'#6B7280', fontFamily:'Inter,sans-serif' }}>ICICIBANK</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right — aspect breakdown */}
+        <div style={{ padding:'6px 10px' }}>
+          <div style={{ fontSize:5, color:'#9CA3AF', fontFamily:'Space Mono,monospace', textTransform:'uppercase', marginBottom:4 }}>SECTOR ASPECT BREAKDOWN</div>
+          <div style={{ fontSize:5, color:'#6B7280', fontFamily:'Inter,sans-serif', marginBottom:6 }}>
+            Average sentiment per aspect — Q4 FY25
+          </div>
+          {[
+            { label:'Revenue',     score:0.78, status:'stable',         delta:'+0.02', color:'#059669' },
+            { label:'Margins',     score:0.71, status:'stable',         delta:'+0.01', color:'#059669' },
+            { label:'Guidance',    score:0.76, status:'stable',         delta:'+0.03', color:'#059669' },
+            { label:'Competition', score:0.74, status:'mixed',          delta:'+0.05', color:'#D97706' },
+            { label:'Macro',       score:0.80, status:'constructive',   delta:'+0.04', color:'#059669' },
+          ].map(({ label, score, status, delta, color }) => (
+            <div key={label} style={{ display:'flex', alignItems:'center', gap:4, padding:'3px 0', borderBottom:'1px solid #F3F4F6' }}>
+              <span style={{ fontSize:6, color:'#374151', fontFamily:'Inter,sans-serif', width:55 }}>{label}</span>
+              <div style={{ flex:1, height:2, background:'#F3F4F6', borderRadius:1 }}>
+                <div style={{ height:'100%', width:`${score*100}%`, background:color, borderRadius:1 }}/>
+              </div>
+              <span style={{ fontSize:5, color, fontFamily:'Space Mono,monospace', width:22, textAlign:'right' }}>{score.toFixed(2)}</span>
+              <span style={{ fontSize:5, color:'#9CA3AF', fontFamily:'Space Mono,monospace', width:20 }}>{delta}</span>
+              <span style={{ fontSize:4.5, color, fontFamily:'Inter,sans-serif', width:50 }}>{status}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -678,20 +760,35 @@ export default function CinematicWalkthrough() {
     const cS = sW
 
     const P = {
-      searchIcon:    { left: w * 0.86,   top: ch * 0.5           },
-      searchInput:   { left: w * 0.50,   top: ch + cH * 0.30     },
-      firstResult:   { left: w * 0.50,   top: ch + cH * 0.44     },
-      quarterCard:   { left: sW * 0.50,  top: ch + cH * 0.38     },
-      briefArea:     { left: cS + cW * 0.45, top: ch + cH * 0.40 },
-      askInput:      { left: cS + cW * 0.43, top: h - 38         },
-      askButton:     { left: cS + cW * 0.70, top: h - 38         },
-      answerArea:    { left: cS + cW * 0.45, top: ch + cH * 0.65 },
-      exportBtn:     { left: cS + cW * 0.26, top: ch + cH * 0.09 },
-      trajectoryTab: { left: cS + cW * 0.55, top: ch + cH * 0.09 },
-      vocabTab:      { left: cS + cW * 0.68, top: ch + cH * 0.09 },
-      qaTab:         { left: cS + cW * 0.80, top: ch + cH * 0.09 },
-      sectorsNav:    { left: w * 0.86,   top: ch * 0.5           },
-      heatmap:       { left: w * 0.44,   top: ch + cH * 0.60     },
+      searchIcon:       { left: w * 0.86,   top: ch * 0.5           },
+      searchInput:      { left: w * 0.50,   top: ch + cH * 0.30     },
+      firstResult:      { left: w * 0.50,   top: ch + cH * 0.44     },
+      quarterCard:      { left: sW * 0.50,  top: ch + cH * 0.28     },
+      'click-quarter':  { left: sW * 0.50,  top: ch + cH * 0.28     },
+      briefArea:        { left: cS + cW * 0.45, top: ch + cH * 0.40 },
+      askInput:         { left: cS + cW * 0.43, top: h - 32         },
+      'click-ask':      { left: cS + cW * 0.43, top: h - 32         },
+      askButton:        { left: cS + cW * 0.78, top: h - 32         },
+      'ask-button':     { left: cS + cW * 0.78, top: h - 32         },
+      'click-ask-send': { left: cS + cW * 0.78, top: h - 32         },
+      answerArea:       { left: cS + cW * 0.45, top: ch + cH * 0.65 },
+      exportBtn:        { left: cS + cW * 0.310, top: ch + cH * 0.052 },
+      'move-export':    { left: cS + cW * 0.310, top: ch + cH * 0.052 },
+      'click-export':   { left: cS + cW * 0.310, top: ch + cH * 0.052 },
+      'pdf-done':       { left: cS + cW * 0.310, top: ch + cH * 0.052 },
+      trajectoryTab:    { left: cS + cW * 0.605, top: ch + cH * 0.052 },
+      'move-trajectory':{ left: cS + cW * 0.605, top: ch + cH * 0.052 },
+      'click-trajectory':{ left: cS + cW * 0.605, top: ch + cH * 0.052 },
+      vocabTab:         { left: cS + cW * 0.725, top: ch + cH * 0.052 },
+      'move-vocab':     { left: cS + cW * 0.725, top: ch + cH * 0.052 },
+      'click-vocab':    { left: cS + cW * 0.725, top: ch + cH * 0.052 },
+      qaTab:            { left: cS + cW * 0.840, top: ch + cH * 0.052 },
+      'move-qa':        { left: cS + cW * 0.840, top: ch + cH * 0.052 },
+      'click-qa':       { left: cS + cW * 0.840, top: ch + cH * 0.052 },
+      sectorsNav:       { left: w * 0.920,   top: ch * 0.5           },
+      'move-sectors':   { left: w * 0.920,   top: ch * 0.5           },
+      'click-sectors':  { left: w * 0.920,   top: ch * 0.5           },
+      heatmap:          { left: w * 0.44,   top: ch + cH * 0.60     },
     }
 
     const ease = 'power2.inOut'

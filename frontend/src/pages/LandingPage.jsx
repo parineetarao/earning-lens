@@ -49,7 +49,7 @@ const STYLES = `
 
 // ─── DATA ──────────────────────────────────────────────────────────────────
 const STATS = [
-  { target: 35,     label: 'Companies tracked',     suffix: '',  data: [28,29,30,32,33,34,35] },
+  { target: 40,     label: 'Companies tracked',     suffix: '',  data: [28,29,30,32,33,34,40] },
   { target: 8,      label: 'Quarters of history',   suffix: '',  data: [50,50,50,50,50,50,50] },
   { target: 65000,  label: 'Sentences scored',      suffix: '+', data: [12000,24000,35000,42000,52000,60000,65000] },
   { target: 8,      label: 'Market sectors',        suffix: '',  data: [50,50,50,50,50,50,50] },
@@ -120,7 +120,7 @@ const ROLES = [
   {
     badge: 'RETAIL',
     title: 'Independent Investor',
-    description: 'Institutional research is expensive and slow. EarningLens gives independent investors the same sentence-level earnings call intelligence that sell-side analysts use — 35 NSE companies, 8 quarters of history, AI-generated analyst briefs. No login. No paywall. No Bloomberg subscription required.',
+    description: 'Institutional research is expensive and slow. EarningLens gives independent investors the same sentence-level earnings call intelligence that sell-side analysts use — 40 NSE companies, 8 quarters of history, AI-generated analyst briefs. No login. No paywall. No Bloomberg subscription required.',
     highlights: ['AI-generated analyst brief per quarter', 'Plain-language intelligence', 'Free, no account needed'],
     image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=900&q=80',
     imageAlt: 'Independent investor checking stocks on laptop',
@@ -400,7 +400,7 @@ function Card3({ visible, delay }) {
       <div style={{ fontSize: '13px', color: '#374151', lineHeight: '1.7', marginTop: '8px', fontFamily: 'Inter, sans-serif' }}>
         See how every company in a sector compares across eight quarters in one view. Click any cell to open the full transcript.
       </div>
-      <div style={{ fontSize: '10px', color: '#9CA3AF', marginTop: '12px', fontFamily: 'Space Mono, monospace' }}>35 companies · 8 sectors · 8 quarters</div>
+      <div style={{ fontSize: '10px', color: '#9CA3AF', marginTop: '12px', fontFamily: 'Space Mono, monospace' }}>40 companies · 8 sectors · 8 quarters</div>
     </BaseCard>
   )
 }
@@ -676,7 +676,7 @@ function LogoItem({ ticker, name }) {
         padding: '0 44px',
         height: '100%',
         cursor: 'pointer',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        borderRight: '1px solid #E4E7EE',
         opacity: 0.85,
         transition: 'all 200ms ease',
       }}
@@ -702,7 +702,7 @@ function LogoItem({ ticker, name }) {
       />
       <span style={{ 
         fontSize: '11px', 
-        color: 'rgba(255,255,255,0.5)', 
+        color: '#6B7280', 
         textAlign: 'center', 
         fontWeight: 500,
         maxWidth: '140px',
@@ -723,14 +723,14 @@ function CompanyLogoStrip() {
         overflow: 'hidden',
         position: 'relative',
         height: '120px',
-        background: 'rgba(255,255,255,0.02)',
+        background: 'transparent',
         marginBottom: '40px'
       }}
     >
       <div style={{ position: 'absolute', inset: 0, display: 'flex', pointerEvents: 'none', zIndex: 3 }}>
-        <div style={{ flex: 1, background: 'linear-gradient(to right, #0C1628, transparent)', maxWidth: '160px' }} />
+        <div style={{ flex: 1, background: 'linear-gradient(to right, #F7F8FA, transparent)', maxWidth: '160px' }} />
         <div style={{ flex: 1 }} />
-        <div style={{ flex: 1, background: 'linear-gradient(to left, #0C1628, transparent)', maxWidth: '160px' }} />
+        <div style={{ flex: 1, background: 'linear-gradient(to left, #F7F8FA, transparent)', maxWidth: '160px' }} />
       </div>
       <div style={{ display: 'flex', height: '100%', animation: 'logoScroll 55s linear infinite', width: 'max-content' }} onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'} onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}>
         {doubled.map((c, i) => <LogoItem key={`${c.ticker}-${i}`} ticker={c.ticker} name={c.name} />)}
@@ -838,7 +838,7 @@ export default function LandingPage() {
           {/* Headline */}
           <h1 style={{ margin: 0, display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
             <div style={{ fontSize: '52px', fontFamily: 'Inter, sans-serif', fontWeight: 600, color: '#1E3A5F', letterSpacing: '-0.02em', lineHeight: 1.1, animation: 'slideUpFade 0.6s ease-out 0s both' }}>
-              Tracking management narratives.
+              Tracking management narratives
             </div>
             <div style={{ fontSize: '52px', fontFamily: 'Inter, sans-serif', fontWeight: 700, color: '#C8922A', letterSpacing: '-0.02em', lineHeight: 1.1, animation: 'slideUpFade 0.6s ease-out 0.1s both' }}>
               Across every quarter.
@@ -857,7 +857,7 @@ export default function LandingPage() {
           {/* Meta Lines */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px', animation: 'fadeIn 0.7s ease-out 0.45s both' }}>
             <div style={{ fontSize: '12px', fontFamily: 'Space Mono, monospace', color: '#9CA3AF' }}>
-              65,000+ sentences analysed · 35 companies · 8 quarters
+              65,000+ sentences analysed · 40 companies · 8 quarters
             </div>
             <div style={{ fontSize: '12px', fontFamily: 'Space Mono, monospace', color: '#9CA3AF' }}>
               Updated each quarter · NSE-listed companies · Zero manual annotation
@@ -1026,7 +1026,7 @@ export default function LandingPage() {
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'Space Mono, monospace', textTransform: 'uppercase' }}>INTELLIGENCE FEATURES</div>
           <h2 style={{ fontSize: '28px', color: '#1E3A5F', fontWeight: 600, fontFamily: 'Inter, sans-serif', margin: '8px 0' }}>What EarningLens does</h2>
-          <div style={{ fontSize: '15px', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Seven intelligence layers extracted from every earnings call.</div>
+          <div style={{ fontSize: '15px', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Seven intelligence layers extracted from every earnings call</div>
         </div>
         <FeatureCardsGrid />
       </section>
@@ -1035,7 +1035,7 @@ export default function LandingPage() {
       <section ref={sec5Ref} style={{ background: '#F7F8FA', padding: '80px', borderTop: '1px solid #E2E8F0' }}>
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <div style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'Space Mono, monospace', textTransform: 'uppercase' }}>COVERAGE</div>
-          <h2 style={{ fontSize: '28px', color: '#1E3A5F', fontWeight: 600, fontFamily: 'Inter, sans-serif', margin: '8px 0' }}>35 companies · 8 sectors · 8 quarters of history</h2>
+          <h2 style={{ fontSize: '28px', color: '#1E3A5F', fontWeight: 600, fontFamily: 'Inter, sans-serif', margin: '8px 0' }}>40 companies · 8 sectors · 8 quarters of history</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', maxWidth: '1100px', margin: '0 auto' }}>
           {SECTORS.map((sector, idx) => (
@@ -1065,7 +1065,7 @@ export default function LandingPage() {
             color: '#0C1628', 
             fontWeight: 600, 
             fontFamily: 'Inter, sans-serif' 
-          }}>Built for people who read between the lines.</h2>
+          }}>Built for people who read between the lines</h2>
         </div>
 
         <div style={{
@@ -1194,28 +1194,18 @@ export default function LandingPage() {
                     <button
                       onClick={goPrev}
                       style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        background: 'rgba(255,255,255,0.08)',
-                        border: '1px solid rgba(255,255,255,0.12)',
-                        color: 'rgba(255,255,255,0.6)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'rgba(255,255,255,0.4)',
                         cursor: 'pointer',
-                        fontSize: '16px',
-                        transition: 'all 200ms ease',
+                        fontSize: 22,
+                        padding: '4px 8px',
+                        lineHeight: 1,
+                        transition: 'color 150ms ease',
                         outline: 'none',
                       }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
-                        e.currentTarget.style.color = '#FFFFFF';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.6)';
-                      }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
+                      onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
                     >
                       ←
                     </button>
@@ -1224,26 +1214,18 @@ export default function LandingPage() {
                   <button
                     onClick={current === ROLES.length - 1 ? undefined : goNext}
                     style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      background: current === ROLES.length - 1 ? 'rgba(46,204,135,0.15)' : '#C8922A',
-                      border: current === ROLES.length - 1 ? '1px solid rgba(46,204,135,0.3)' : 'none',
-                      color: current === ROLES.length - 1 ? '#2ECC87' : '#0C1628',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: current === ROLES.length - 1 ? 'default' : 'pointer',
-                      fontSize: '16px',
-                      transition: 'all 200ms ease',
-                      outline: 'none'
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'rgba(255,255,255,0.5)',
+                      cursor: 'pointer',
+                      fontSize: 22,
+                      padding: '4px 8px',
+                      lineHeight: 1,
+                      transition: 'color 150ms ease',
+                      outline: 'none',
                     }}
-                    onMouseEnter={e => {
-                      if (current !== ROLES.length - 1) e.currentTarget.style.background = '#D4A843';
-                    }}
-                    onMouseLeave={e => {
-                      if (current !== ROLES.length - 1) e.currentTarget.style.background = '#C8922A';
-                    }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
                   >
                     {current === ROLES.length - 1 ? "✓" : "→"}
                   </button>
@@ -1309,10 +1291,10 @@ export default function LandingPage() {
       </section>
 
       {/* SECTION 7 — CTA */}
-      <section ref={sec7Ref} style={{ background: '#0C1628', padding: '80px 80px 0 80px', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '36px', fontWeight: 600, color: '#FFFFFF', margin: 0, fontFamily: 'Inter, sans-serif' }}>Start exploring.</h2>
-        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', marginTop: '8px', marginBottom: '0', fontFamily: 'Inter, sans-serif' }}>
-          35 NSE companies. 8 quarters. No login required.
+      <section ref={sec7Ref} style={{ background: '#F7F8FA', padding: '80px 80px 0 80px', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '36px', fontWeight: 600, color: '#0C1628', margin: 0, fontFamily: 'Inter, sans-serif' }}>Start exploring</h2>
+        <p style={{ fontSize: '14px', color: '#6B7280', marginTop: '8px', marginBottom: '0', fontFamily: 'Inter, sans-serif' }}>
+          40 NSE companies. 8 quarters. No login required.
         </p>
         
         {/* Search Bar */}
@@ -1325,13 +1307,25 @@ export default function LandingPage() {
                 if (ticker) navigate(`/company/${ticker}/Q4_FY25`);
               }
             }}
-            style={{ width: '100%', height: '52px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '0 20px', fontSize: '14px', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', outline: 'none', boxSizing: 'border-box' }}
+            style={{ 
+              width: '100%', 
+              height: '52px', 
+              background: '#FFFFFF', 
+              border: '1px solid #E4E7EE', 
+              borderRadius: '8px', 
+              padding: '0 20px', 
+              fontSize: '14px', 
+              color: '#111827', 
+              fontFamily: 'Inter, sans-serif', 
+              outline: 'none', 
+              boxSizing: 'border-box' 
+            }}
           />
         </div>
 
         <CompanyLogoStrip />
 
-        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', fontFamily: 'Space Mono, monospace', letterSpacing: '0.1em', margin: '56px 0 20px 0', textAlign: 'center' }}>OR EXPLORE BY SECTOR</div>
+        <div style={{ fontSize: '11px', color: '#9CA3AF', textTransform: 'uppercase', fontFamily: 'Space Mono, monospace', letterSpacing: '0.1em', margin: '56px 0 20px 0', textAlign: 'center' }}>OR EXPLORE BY SECTOR</div>
         
         <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap', paddingBottom: '60px' }}>
           {SECTOR_PILLS.map((sector) => (
@@ -1344,18 +1338,27 @@ export default function LandingPage() {
                 gap: '8px',
                 padding: '10px 20px',
                 borderRadius: '8px',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: '#FFFFFF',
+                border: '1px solid #E4E7EE',
+                color: '#374151',
                 cursor: 'pointer',
                 transition: 'all 150ms ease',
                 fontFamily: 'Inter, sans-serif'
               }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = '#C8922A';
+                e.currentTarget.style.color = '#0C1628';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = '#E4E7EE';
+                e.currentTarget.style.color = '#374151';
+              }}
             >
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: sector.color }} />
-              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
+              <div style={{ fontSize: '13px', fontWeight: 500 }}>
                 {sector.label}
               </div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'Space Mono, monospace', marginLeft: '4px' }}>
+              <div style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'Space Mono, monospace', marginLeft: '4px' }}>
                 ({sector.count})
               </div>
             </div>
@@ -1367,7 +1370,7 @@ export default function LandingPage() {
           style={{ 
             width: '100%',
             padding: '32px 80px',
-            borderTop: '1px solid rgba(255,255,255,0.08)',
+            borderTop: '1px solid #E4E7EE',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -1396,7 +1399,7 @@ export default function LandingPage() {
             </div>
             <span 
               style={{ 
-                color: '#FFFFFF', 
+                color: '#0C1628', 
                 fontFamily: 'Inter, sans-serif', 
                 fontSize: '14px', 
                 fontWeight: 600,
@@ -1414,7 +1417,7 @@ export default function LandingPage() {
               textAlign: 'center',
               fontSize: '11px',
               fontFamily: 'Space Mono, monospace',
-              color: 'rgba(255,255,255,0.25)',
+              color: '#9CA3AF',
               padding: '0 20px'
             }}
           >
@@ -1433,12 +1436,12 @@ export default function LandingPage() {
                 gap: '6px',
                 fontSize: '12px',
                 fontFamily: 'Inter, sans-serif',
-                color: 'rgba(255,255,255,0.4)',
+                color: '#6B7280',
                 textDecoration: 'none',
                 transition: 'color 150ms ease',
               }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.9)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+              onMouseEnter={e => e.currentTarget.style.color = '#0C1628'}
+              onMouseLeave={e => e.currentTarget.style.color = '#6B7280'}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>

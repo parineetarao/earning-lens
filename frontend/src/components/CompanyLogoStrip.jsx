@@ -26,9 +26,6 @@ const COMPANIES = [
   { ticker: 'NESTLEIND',  name: 'Nestle India' },
   { ticker: 'SUNPHARMA',  name: 'Sun Pharma' },
   { ticker: 'NTPC',       name: 'NTPC' },
-  { ticker: 'POWERGRID',  name: 'Power Grid' },
-  { ticker: 'TATAPOWER',  name: 'Tata Power' },
-  { ticker: 'NMDC',       name: 'NMDC' },
   { ticker: 'SAIL',       name: 'SAIL' },
   { ticker: 'JINDALSTEL', name: 'Jindal Steel & Power' },
   { ticker: 'ACCLTD',     name: 'ACC Limited' },
@@ -37,6 +34,14 @@ const COMPANIES = [
   { ticker: 'AUROPHARMA', name: 'Aurobindo Pharma' },
   { ticker: 'SHREECEM',   name: 'Shree Cement' },
   { ticker: 'DABUR',      name: 'Dabur India' },
+  { ticker: 'AXISBANK',   name: 'Axis Bank' },
+  { ticker: 'INDUSINDBK', name: 'IndusInd Bank' },
+  { ticker: 'JSWSTEEL',   name: 'JSW Steel' },
+  { ticker: 'MARUTI',     name: 'Maruti Suzuki' },
+  { ticker: 'DALMIACEM',  name: 'Dalmia Bharat' },
+  { ticker: 'ONGC',       name: 'ONGC' },
+  { ticker: 'TATASTEEL',  name: 'Tata Steel' },
+  { ticker: 'TATAPOWER',  name: 'Tata Power' },
 ]
 
 function LogoItem({ ticker, name }) {

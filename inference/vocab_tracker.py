@@ -17,7 +17,7 @@ nltk.download('wordnet', quiet=True)
 # Common English stopwords plus earnings call filler words.
 # These are filtered out before counting because they appear in every
 # transcript at high frequency and carry no analytical signal.
-FINANCIAL_STOPWORDS = set([
+STOPWORDS = set([
     # Standard stopwords
     'the','a','an','and','or','but','in','on','at','to','for','of','with',
     'by','from','as','is','was','are','were','be','been','have','has','had',
