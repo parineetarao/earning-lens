@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react'
 import { findRelevantSentences } from '../utils/transcriptSearch'
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const GROQ_MODEL = 'llama-3.1-8b-instant'
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  'https://earninglens-backend.onrender.com'
 
 const EXAMPLE_QUESTIONS = [
   'What did management say about margins?',
@@ -77,34 +77,35 @@ Return exactly this JSON format:
 }`
 
       // Step 3: Call Groq API
-      const response = await fetch(GROQ_API_URL, {
+      const response = await fetch(`${BACKEND_URL}/api/ask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${GROQ_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: GROQ_MODEL,
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.1,
-          max_tokens: 600,
-          response_format: { type: 'json_object' },
-        }),
-      })
+    },
+    body: JSON.stringify({
+      question: q,
+      sentences: relevant.map(r => r.sentence),
+      company_name: companyName,
+    quarter_id: quarterId,
+    }),
+  })
 
-      if (!response.ok) {
-        throw new Error(`Groq API error: ${response.status}`)
-      }
+  if (!response.ok) {
+    throw new Error(`Backend error: ${response.status}`)
+  }
 
-      const data = await response.json()
-      const raw = data.choices?.[0]?.message?.content
+  const data = await response.json()
 
-      let parsed
-      try {
-        parsed = JSON.parse(raw)
-      } catch {
-        parsed = { answer: raw, relevantIndices: [], confidence: 'low' }
-      }
+  let parsed
+  try {
+    parsed = JSON.parse(data.result)
+  } catch {
+    parsed = {
+      answer: 'Could not parse response.',
+      relevantIndices: [],
+      confidence: 'low',
+    }
+  } 
 
       // Map local indices back to original transcript indices
       const highlightIndices = (parsed.relevantIndices || [])
