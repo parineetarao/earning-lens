@@ -41,7 +41,6 @@ const COMPANIES = [
   { ticker: 'DALMIACEM',  name: 'Dalmia Bharat' },
   { ticker: 'ONGC',       name: 'ONGC' },
   { ticker: 'TATASTEEL',  name: 'Tata Steel' },
-  { ticker: 'TATAPOWER',  name: 'Tata Power' },
 ]
 
 function LogoItem({ ticker, name }) {

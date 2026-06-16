@@ -79,6 +79,11 @@ const LOGO_COMPANIES = [
   { ticker: 'JINDALSTEL', name: 'Jindal Steel & Power', domain: 'jindalsteelpower.com' },
   { ticker: 'ADANIGREEN', name: 'Adani Green Energy', domain: 'adanigreen.com' },
   { ticker: 'DABUR',      name: 'Dabur India', domain: 'dabur.com' },
+  { ticker: 'AXISBANK',   name: 'Axis Bank' },
+  { ticker: 'INDUSINDBK', name: 'IndusInd Bank' },
+  { ticker: 'JSWSTEEL',   name: 'JSW Steel' },
+  { ticker: 'ONGC',       name: 'ONGC' },
+  { ticker: 'TATASTEEL',  name: 'Tata Steel' },
 ];
 
 const SECTOR_PILLS = [
@@ -1012,12 +1017,10 @@ export default function LandingPage() {
 
       {/* SECTION 3 — PRODUCT WALKTHROUGH */}
       <section ref={sec3Ref} style={{
-        background: '#F0F2F5',
-        padding: '80px 0',
-        borderTop: '1px solid #E4E7EE',
-        borderBottom: '1px solid #E4E7EE',
+        background: '#F7F8FA',
+        padding: 0,
+        margin: 0,
       }}>
-        
         <CinematicWalkthrough />
       </section>
 

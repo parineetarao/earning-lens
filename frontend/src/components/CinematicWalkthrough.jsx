@@ -772,19 +772,19 @@ export default function CinematicWalkthrough() {
       'ask-button':     { left: cS + cW * 0.78, top: h - 32         },
       'click-ask-send': { left: cS + cW * 0.78, top: h - 32         },
       answerArea:       { left: cS + cW * 0.45, top: ch + cH * 0.65 },
-      exportBtn:        { left: cS + cW * 0.310, top: ch + cH * 0.052 },
-      'move-export':    { left: cS + cW * 0.310, top: ch + cH * 0.052 },
-      'click-export':   { left: cS + cW * 0.310, top: ch + cH * 0.052 },
-      'pdf-done':       { left: cS + cW * 0.310, top: ch + cH * 0.052 },
-      trajectoryTab:    { left: cS + cW * 0.605, top: ch + cH * 0.052 },
-      'move-trajectory':{ left: cS + cW * 0.605, top: ch + cH * 0.052 },
-      'click-trajectory':{ left: cS + cW * 0.605, top: ch + cH * 0.052 },
-      vocabTab:         { left: cS + cW * 0.725, top: ch + cH * 0.052 },
-      'move-vocab':     { left: cS + cW * 0.725, top: ch + cH * 0.052 },
-      'click-vocab':    { left: cS + cW * 0.725, top: ch + cH * 0.052 },
-      qaTab:            { left: cS + cW * 0.840, top: ch + cH * 0.052 },
-      'move-qa':        { left: cS + cW * 0.840, top: ch + cH * 0.052 },
-      'click-qa':       { left: cS + cW * 0.840, top: ch + cH * 0.052 },
+      exportBtn:        { left: cS + cW * 0.360, top: ch + cH * 0.052 },
+      'move-export':    { left: cS + cW * 0.360, top: ch + cH * 0.052 },
+      'click-export':   { left: cS + cW * 0.360, top: ch + cH * 0.052 },
+      'pdf-done':       { left: cS + cW * 0.360, top: ch + cH * 0.052 },
+      trajectoryTab:    { left: cS + cW * 0.660, top: ch + cH * 0.052 },
+      'move-trajectory':{ left: cS + cW * 0.660, top: ch + cH * 0.052 },
+      'click-trajectory':{ left: cS + cW * 0.660, top: ch + cH * 0.052 },
+      vocabTab:         { left: cS + cW * 0.775, top: ch + cH * 0.052 },
+      'move-vocab':     { left: cS + cW * 0.775, top: ch + cH * 0.052 },
+      'click-vocab':    { left: cS + cW * 0.775, top: ch + cH * 0.052 },
+      qaTab:            { left: cS + cW * 0.890, top: ch + cH * 0.052 },
+      'move-qa':        { left: cS + cW * 0.890, top: ch + cH * 0.052 },
+      'click-qa':       { left: cS + cW * 0.890, top: ch + cH * 0.052 },
       sectorsNav:       { left: w * 0.920,   top: ch * 0.5           },
       'move-sectors':   { left: w * 0.920,   top: ch * 0.5           },
       'click-sectors':  { left: w * 0.920,   top: ch * 0.5           },
@@ -895,7 +895,7 @@ export default function CinematicWalkthrough() {
   }, [screenDims, fireRipple])
 
   return (
-    <div style={{ background: '#ECEEF1', padding: '60px 0', borderTop: '1px solid #E4E7EE', borderBottom: '1px solid #E4E7EE' }}>
+    <div style={{ background: '#F7F8FA', paddingTop: '48px', paddingBottom: '48px', borderTop: '1px solid #E4E7EE', borderBottom: '1px solid #E4E7EE' }}>
       {/* Section header */}
       <div style={{ textAlign: 'center', marginBottom: 36 }}>
         <div style={{ fontSize: 11, color: '#9CA3AF', fontFamily: 'Space Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
