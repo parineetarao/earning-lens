@@ -165,7 +165,7 @@ export default function SearchPage() {
         setIsLoading(true)
         setError('')
 
-        const response = await fetch('http://localhost:8000/api/companies', {
+        const response = await fetch('https://earninglens-backend.onrender.com/api/companies', {
           signal: controller.signal,
         })
 

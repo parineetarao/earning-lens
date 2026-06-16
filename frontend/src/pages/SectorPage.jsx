@@ -280,7 +280,7 @@ export default function SectorPage() {
     async function loadSectors() {
       try {
         setIsLoading(true)
-        const response = await fetch('http://localhost:8000/api/sectors', { signal: controller.signal })
+        const response = await fetch('https://earninglens-backend.onrender.com/api/sectors', { signal: controller.signal })
         if (!response.ok) throw new Error(`Status ${response.status}`)
         const data = await response.json()
         const nextSectors = normalizeSectorList(data)

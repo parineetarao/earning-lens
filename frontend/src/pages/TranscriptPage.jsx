@@ -100,7 +100,7 @@ export default function TranscriptPage() {
       try {
         setIsCompanyLoading(true);
 
-        const response = await fetch(`http://localhost:8000/api/companies/${normalizedCompanyId}`, {
+        const response = await fetch(`https://earninglens-backend.onrender.com/api/companies/${normalizedCompanyId}`, {
           signal: controller.signal,
         });
 
