@@ -155,4 +155,4 @@ npm run dev
 
 ## Project by
 
-Parin · BTech AI & Data Science · 2025
+Parineeta Rao · BTech AI & Data Science · 2026
