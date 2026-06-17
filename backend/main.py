@@ -22,7 +22,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",        # Vite dev server
         "http://localhost:3000",        # alternate dev port
-        "https://earninglens.vercel.app",  # production frontend
+        "https://earning-lens.vercel.app",  # production frontend
         "https://earninglens-backend.onrender.com",
     ],
     allow_credentials=True,
