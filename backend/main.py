@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes import companies, sectors, upload
 import os
 import httpx
-from pydantic import BaseMode
+from pydantic import BaseModel
 
 
 
