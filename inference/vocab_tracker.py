@@ -14,9 +14,15 @@ nltk.download('punkt_tab', quiet=True)
 nltk.download('stopwords', quiet=True)
 nltk.download('wordnet', quiet=True)
 
+
+# ============================================================
+# STOPWORDS
+# ============================================================
+
 # Common English stopwords plus earnings call filler words.
-# These are filtered out before counting because they appear in every
-# transcript at high frequency and carry no analytical signal.
+# These are filtered out before counting because they appear in
+# every transcript at high frequency and carry little analytical signal.
+
 STOPWORDS = set([
     # Standard stopwords
     'the','a','an','and','or','but','in','on','at','to','for','of','with',
@@ -29,29 +35,34 @@ STOPWORDS = set([
     'well','right','good','going','look','think','know','want','need','make',
     'get','see','say','said','come','take','give','use','find','back','way',
     'because','while','though','although','however','therefore','thus',
-    # Conversational filler (specific to earnings calls)
+
+    # Conversational filler
     'yes','okay','ok','yeah','absolutely','certainly','exactly','sure',
     'great','wonderful','thank','thanks','appreciate','congratulations',
     'please','certainly','definitely','clearly','obviously','basically',
     'actually','really','quite','rather','pretty','fairly','simply',
     'always','never','often','usually','generally','typically','normally',
+
     # Earnings call specific noise
     'quarter','quarters','year','years','fiscal','fy','q1','q2','q3','q4',
     'first','second','third','fourth','one','two','three','four','five',
     'per','basis','point','points','percent','percentage','basis',
     'mr','ms','mrs','sir','madam','ladies','gentlemen','hello','hi',
     've','re','ll','d','s','t','m','n','er','uh','um',
+
     # Abbreviations that appear as noise
     'cr','pat','ytd','yoy','qoq','lhs','rhs','fyi','imo','btw',
-    # Common proper nouns that appear as noise
+
+    # Common proper nouns / generic corporate terms
     'india','indian','company','companies','business','businesses',
     'management','team','board','director','chairman','ceo','cfo','coo',
     'analyst','analysts','investor','investors','operator','moderator',
-    # Month names — appear heavily in Q4 vs Q3 comparisons
+
+    # Month names
     'january','february','march','april','may','june',
     'july','august','september','october','november','december',
 
-    # Number words — "nine percent", "five basis points"
+    # Number words
     'zero','one','two','three','four','five','six','seven',
     'eight','nine','ten','eleven','twelve','hundred','thousand',
 
@@ -60,26 +71,37 @@ STOPWORDS = set([
     'since','still','already','lot','much','many','every',
 ])
 
-# POS tags to KEEP — only these word types are financially meaningful
+
+# ============================================================
+# POS TAGS TO KEEP
+# ============================================================
+
 KEEP_POS_TAGS = {
-    'JJ',   # Adjective: cautious, strong, elevated, weak
-    'JJR',  # Adjective comparative: stronger, weaker, higher
-    'JJS',  # Adjective superlative: strongest, weakest
-    'VB',   # Verb base: accelerate, expand, decline, improve
-    'VBD',  # Verb past tense: accelerated, expanded, declined
-    'VBG',  # Verb gerund: accelerating, expanding, declining
-    'VBN',  # Verb past participle: improved, reduced, impacted
-    'VBP',  # Verb present: improve, reduce, impact
-    'VBZ',  # Verb 3rd person: improves, reduces, impacts
-    'NN',   # Noun singular: growth, margin, revenue, pressure
-    'NNS',  # Noun plural: margins, revenues, headwinds
-    'RB',   # Adverb: significantly, moderately, substantially
-    'RBR',  # Adverb comparative: more significantly
+    'JJ',   # Adjective
+    'JJR',  # Comparative adjective
+    'JJS',  # Superlative adjective
+
+    'VB',   # Verb base
+    'VBD',  # Past tense
+    'VBG',  # Gerund
+    'VBN',  # Past participle
+    'VBP',  # Present tense
+    'VBZ',  # 3rd person present
+
+    'NN',   # Singular noun
+    'NNS',  # Plural noun
+
+    'RB',   # Adverb
+    'RBR',  # Comparative adverb
 }
 
-# Additional words to always exclude even if they pass POS filter
+
+# ============================================================
+# ALWAYS EXCLUDE
+# ============================================================
+
 ALWAYS_EXCLUDE = {
-    # Generic verbs with no financial signal
+    # Generic verbs
     'say','said','says','saying','go','goes','went','going',
     'come','came','comes','coming','get','got','gets','getting',
     'give','gave','gives','giving','take','took','takes','taking',
@@ -90,208 +112,273 @@ ALWAYS_EXCLUDE = {
     'continue','continued','continues','continuing',
     'remain','remained','remains','remaining',
     'include','included','includes','including',
-    'increase','increase','increases','increasing',  # too generic alone
+    'increase','increases','increasing',
+
     'happen','happened','happens','happening',
-    # Generic nouns with no signal
-    'number','numbers','time','times','way','ways','thing','things',
-    'part','parts','place','places','point','points','level','levels',
-    'side','area','areas','kind','type','types','lot','lots',
-    'result','results','case','cases','fact','basis','line','lines',
-    'end','start','top','bottom','front','back','set','sets',
-    # Names and titles (proper nouns handled separately)
+
+    # Generic nouns
+    'number','numbers','time','times','way','ways',
+    'thing','things','part','parts','place','places',
+    'point','points','level','levels','side','area','areas',
+    'kind','type','types','lot','lots',
+    'result','results','case','cases','fact','basis',
+    'line','lines','end','start','top','bottom','front',
+    'back','set','sets',
+
+    # Company names / generic names
     'mahindra','tata','reliance','hdfc','icici','infosys','wipro',
-    # Generic words passing POS filter
+
+    # Generic words
     'current','level','requirement','requirements',
 }
 
+
+# ============================================================
+# MEANINGFUL WORD FILTER
+# ============================================================
+
 def is_meaningful_word(word, pos_tag_result):
     """
-    Returns True only if the word is financially meaningful.
+    Returns True only if the word is considered financially meaningful.
     """
+
     word_lower = word.lower()
-    
-    # Must be at least 4 characters
+
+    # Minimum length
     if len(word_lower) < 4:
         return False
-    
-    # Must not be in stopwords
+
+    # Stopwords
     if word_lower in STOPWORDS:
         return False
-    
-    # Must not be in always-exclude list
+
+    # Always-excluded words
     if word_lower in ALWAYS_EXCLUDE:
         return False
-    
-    # Must not be purely numeric or contain digits
+
+    # Numbers / words containing digits
     if re.search(r'\d', word_lower):
         return False
-    
-    # Must not be an abbreviation (all caps, short)
+
+    # Short all-caps abbreviations
     if word.isupper() and len(word) <= 5:
         return False
-    
-    # Must not start with capital (likely proper noun — person/company name)
-    # Exception: if it appears at start of sentence it may be legitimate
-    # We handle this by checking the POS tag
+
+    # Proper nouns
     pos = pos_tag_result
-    
-    # Reject proper nouns (NNP, NNPS) — these are person/company names
+
     if pos in ('NNP', 'NNPS'):
         return False
-    
-    # Must be in the meaningful POS categories
+
+    # Only retain meaningful POS categories
     if pos not in KEEP_POS_TAGS:
         return False
-    
+
     return True
 
 
+# ============================================================
+# WORD FREQUENCY
+# ============================================================
+
 def get_word_frequencies(sentences):
     """
-    Extract financially meaningful word frequencies from a list of sentence dicts.
-    Uses POS tagging to filter out proper nouns, filler words, and abbreviations.
+    Extract financially meaningful word frequencies from a list
+    of sentence dictionaries.
+
+    Each sentence dictionary should contain:
+        {"text": "..."}
     """
-    from collections import Counter
-    
+
     all_text = ' '.join(
-        s.get('text', '') for s in sentences if s.get('text')
+        s.get('text', '')
+        for s in sentences
+        if s.get('text')
     ).lower()
-    
+
     # Tokenize
     tokens = word_tokenize(all_text)
-    
-    # POS tag all tokens at once (more accurate than word by word)
+
+    # POS tag all tokens
     tagged = pos_tag(tokens)
-    
-    # Filter to meaningful words only
+
+    # Filter meaningful words
     meaningful_words = [
-        word for word, pos in tagged
+        word
+        for word, pos in tagged
         if is_meaningful_word(word, pos)
     ]
-    
+
     return Counter(meaningful_words)
 
 
+# ============================================================
+# LEGACY TOKENIZER
+# ============================================================
+
 def tokenize(text: str) -> list[str]:
     """
-    Converts raw transcript text into a list of cleaned word tokens.
+    Converts raw transcript text into lowercase alphabetic tokens
+    with STOPWORDS removed.
 
-    What goes in:
-        text: any string — full transcript, paragraph, or sentence
-
-    What comes out:
-        A list of lowercase alphabetic words with stopwords removed.
-        Numbers, punctuation, and single characters are excluded.
-
-    Why only alphabetic tokens:
-        Numbers like "12.4" and "FY25" appear constantly in financial
-        transcripts but are not vocabulary signals — every transcript
-        has financial figures. Keeping only alphabetic words isolates
-        the management vocabulary choices we care about.
+    This function is retained for compatibility with older code.
+    Vocabulary Delta now uses get_word_frequencies() instead.
     """
-    # Extract only alphabetic words, convert to lowercase
-    tokens = re.findall(r"[a-zA-Z]{2,}", text.lower())
 
-    # Remove stopwords
-    tokens = [t for t in tokens if t not in STOPWORDS]
+    tokens = re.findall(
+        r"[a-zA-Z]{2,}",
+        text.lower()
+    )
+
+    tokens = [
+        t for t in tokens
+        if t not in STOPWORDS
+    ]
 
     return tokens
 
 
+# ============================================================
+# LEGACY WORD COUNTER
+# ============================================================
+
 def count_words(text: str) -> Counter:
     """
-    Returns a word frequency Counter for the given text.
+    Returns a word-frequency Counter.
 
-    What goes in:
-        text: full transcript text as a single string
-
-    What comes out:
-        A Counter object — dict-like, maps word → count.
-        e.g. Counter({"headwinds": 11, "confident": 3, "margin": 8, ...})
-
-    Counter is used instead of a plain dict because it supports
-    arithmetic operations — subtraction, addition — which we use
-    in compute_vocab_delta() to find frequency changes.
+    Retained for compatibility with older code.
+    Vocabulary Delta now uses get_word_frequencies().
     """
+
     tokens = tokenize(text)
+
     return Counter(tokens)
 
 
+# ============================================================
+# VOCABULARY DELTA
+# ============================================================
+
 def compute_vocab_delta(
-    current_text: str,
-    prior_text: str,
+    current_sentences: list[dict],
+    prior_sentences: list[dict],
     top_n: int = 15
 ) -> dict:
     """
-    Computes which words increased and decreased most between two quarters.
+    Computes which meaningful words increased and decreased
+    between two quarters.
 
-    What goes in:
-        current_text: full transcript text for the current quarter
-        prior_text:   full transcript text for the prior quarter
-        top_n:        how many words to return in each direction (default 15)
+    Parameters:
+        current_sentences:
+            Sentence dictionaries from the current quarter.
 
-    What comes out:
+        prior_sentences:
+            Sentence dictionaries from the previous quarter.
+
+        top_n:
+            Number of words to return in each direction.
+
+    Returns:
         {
             "increased": [
-                {"word": "headwinds", "current": 11, "prior": 2, "delta": 9},
-                {"word": "cautious",  "current": 7,  "prior": 1, "delta": 6},
-                ...
+                {
+                    "word": "headwinds",
+                    "current": 11,
+                    "prior": 2,
+                    "delta": 9
+                }
             ],
             "decreased": [
-                {"word": "confident", "current": 1, "prior": 9, "delta": -8},
-                {"word": "robust",    "current": 0, "prior": 6, "delta": -6},
-                ...
+                {
+                    "word": "confident",
+                    "current": 1,
+                    "prior": 9,
+                    "delta": -8
+                }
             ]
         }
 
-    Why compute absolute delta rather than percentage change:
-        Percentage change is misleading for low-frequency words.
-        A word going from 1 to 3 occurrences is a 200% increase but
-        carries almost no signal. A word going from 2 to 11 is a 450%
-        increase AND a meaningful absolute change of 9. Sorting by
-        absolute delta surfaces the most practically significant shifts.
-
-    Why filter words appearing fewer than 2 times total:
-        Words that appear once in either transcript are likely proper nouns,
-        typos, or one-off references. Requiring at least 2 total occurrences
-        removes noise from the delta table.
+    Processing:
+        1. Extract meaningful words from both quarters.
+        2. Count their frequencies.
+        3. Calculate absolute frequency differences.
+        4. Remove words appearing fewer than twice in total.
+        5. Return the largest increases and decreases.
     """
-    current_counts = get_word_frequencies(current_sentences)
-    prior_counts   = get_word_frequencies(prior_sentences)
 
-    # Get all unique words across both transcripts
-    all_words = set(current_counts.keys()) | set(prior_counts.keys())
+    # Get filtered word frequencies
+    current_counts = get_word_frequencies(
+        current_sentences
+    )
+
+    prior_counts = get_word_frequencies(
+        prior_sentences
+    )
+
+    # All unique words across both quarters
+    all_words = (
+        set(current_counts.keys())
+        |
+        set(prior_counts.keys())
+    )
 
     deltas = []
-    for word in all_words:
-        current = current_counts.get(word, 0)
-        prior   = prior_counts.get(word, 0)
-        total   = current + prior
 
-        # Skip words with fewer than 2 total occurrences across both transcripts
-        if total < 1:
+    for word in all_words:
+
+        current = current_counts.get(
+            word,
+            0
+        )
+
+        prior = prior_counts.get(
+            word,
+            0
+        )
+
+        total = current + prior
+
+        # Ignore words occurring only once in total
+        if total < 2:
             continue
 
         delta = current - prior
+
+        # Ignore words whose frequency did not change
         if delta == 0:
-            continue  # no change — not interesting
+            continue
 
         deltas.append({
-            "word":    word,
+            "word": word,
             "current": current,
-            "prior":   prior,
-            "delta":   delta,
+            "prior": prior,
+            "delta": delta,
         })
 
-    # Sort by delta descending for increased, ascending for decreased
+    # --------------------------------------------------------
+    # Increased words
+    # --------------------------------------------------------
+
     increased = sorted(
-        [d for d in deltas if d["delta"] > 0],
+        [
+            d
+            for d in deltas
+            if d["delta"] > 0
+        ],
         key=lambda x: x["delta"],
         reverse=True
     )[:top_n]
 
+    # --------------------------------------------------------
+    # Decreased words
+    # --------------------------------------------------------
+
     decreased = sorted(
-        [d for d in deltas if d["delta"] < 0],
+        [
+            d
+            for d in deltas
+            if d["delta"] < 0
+        ],
         key=lambda x: x["delta"]
     )[:top_n]
 
@@ -301,47 +388,31 @@ def compute_vocab_delta(
     }
 
 
+# ============================================================
+# KEY QUOTES
+# ============================================================
+
 def extract_key_quotes(
     scored_sentences: list[dict],
     aspect: str,
     top_n: int = 3
 ) -> list[dict]:
     """
-    Extracts the most quotable sentences for a given aspect.
-
-    What goes in:
-        scored_sentences: enriched sentence list with sentiment, aspect, confidence
-        aspect: one of "revenue", "margins", "guidance", "competition", "macro"
-        top_n: number of quotes to return (default 3)
-
-    What comes out:
-        A list of sentence dicts sorted by negative confidence descending.
-        These are the sentences an analyst would most want to quote in a
-        research note — the clearest, most definitive negative language
-        for that business aspect.
-
-        Each dict:
-        {
-            "text":       "Margin pressure is expected to persist into Q4.",
-            "sentiment":  "negative",
-            "confidence": 0.93,
-            "aspect":     "margins",
-        }
-
-    Why negative sentences specifically:
-        Analysts quote negative language because it is newsworthy and
-        actionable. A CFO saying "we are confident" is expected.
-        A CFO saying "we are concerned about margin trajectory" is a signal.
-        The Key Quotes feature on the frontend surfaces the latter.
+    Extracts the strongest negative sentences for a given aspect.
     """
+
     aspect_sentences = [
-        s for s in scored_sentences
+        s
+        for s in scored_sentences
         if s.get("aspect") == aspect
         and s.get("sentiment") == "negative"
     ]
 
     aspect_sentences.sort(
-        key=lambda s: s.get("confidence", 0),
+        key=lambda s: s.get(
+            "confidence",
+            0
+        ),
         reverse=True
     )
 
