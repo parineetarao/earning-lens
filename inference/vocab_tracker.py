@@ -102,7 +102,7 @@ def is_meaningful_word(word, pos_tag_result):
         return False
     
     # Must not be in stopwords
-    if word_lower in FINANCIAL_STOPWORDS:
+    if word_lower in STOPWORDS:
         return False
     
     # Must not be in always-exclude list
@@ -243,8 +243,8 @@ def compute_vocab_delta(
         typos, or one-off references. Requiring at least 2 total occurrences
         removes noise from the delta table.
     """
-    current_counts = count_words(current_text)
-    prior_counts   = count_words(prior_text)
+    current_counts = get_word_frequencies(current_sentences)
+    prior_counts   = get_word_frequencies(prior_sentences)
 
     # Get all unique words across both transcripts
     all_words = set(current_counts.keys()) | set(prior_counts.keys())
