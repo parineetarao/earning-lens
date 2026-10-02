@@ -74,13 +74,12 @@ async def ask_transcript(request: AskRequest):
     groq_api_key = os.environ.get("GROQ_API_KEY")
     if not groq_api_key:
         raise HTTPException(status_code=500, detail="Groq not configured")
-    
-    # Build the same prompt your frontend currently uses
+
     sentence_list = "\n".join([
         f"[{i}] (index:{s.get('sentence_index', i)}) \"{s.get('text', '')}\""
         for i, s in enumerate(request.sentences[:15])
     ])
-    
+
     prompt = f"""You are a senior equity research analyst reviewing an earnings call transcript for {request.company_name} ({request.quarter_id}).
 
 An analyst has asked: "{request.question}"
@@ -110,7 +109,16 @@ Return ONLY valid JSON in this exact format:
             },
             timeout=30,
         )
-        response.raise_for_status()
+
+        # Log actual Groq error for debugging
+        if response.status_code != 200:
+            error_body = response.text
+            print(f"Groq error {response.status_code}: {error_body}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Groq error {response.status_code}: {error_body}"
+            )
+
         data = response.json()
         content = data["choices"][0]["message"]["content"]
         return {"result": content}
