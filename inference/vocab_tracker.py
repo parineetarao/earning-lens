@@ -47,6 +47,17 @@ STOPWORDS = set([
     'india','indian','company','companies','business','businesses',
     'management','team','board','director','chairman','ceo','cfo','coo',
     'analyst','analysts','investor','investors','operator','moderator',
+    # Month names — appear heavily in Q4 vs Q3 comparisons
+    'january','february','march','april','may','june',
+    'july','august','september','october','november','december',
+
+    # Number words — "nine percent", "five basis points"
+    'zero','one','two','three','four','five','six','seven',
+    'eight','nine','ten','eleven','twelve','hundred','thousand',
+
+    # More filler
+    'okay','current','fiscal','now','because','level',
+    'since','still','already','lot','much','many','every',
 ])
 
 # POS tags to KEEP — only these word types are financially meaningful
@@ -89,6 +100,8 @@ ALWAYS_EXCLUDE = {
     'end','start','top','bottom','front','back','set','sets',
     # Names and titles (proper nouns handled separately)
     'mahindra','tata','reliance','hdfc','icici','infosys','wipro',
+    # Generic words passing POS filter
+    'current','level','requirement','requirements',
 }
 
 def is_meaningful_word(word, pos_tag_result):
