@@ -103,7 +103,7 @@ Return ONLY valid JSON in this exact format:
                 "Content-Type": "application/json",
             },
             json={
-                "model": "llama-3.3-70b-versatile",
+                "model": "gemma2-9b-it",
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.1,
                 "max_tokens": 600,
